@@ -31,10 +31,13 @@ function _deepAssign(obj, src) {
   for (let key in src) {
     if (src.hasOwnProperty(key)) {
       let val = src[key]
-      if (isObject(val)) {
-        if (!isObject(obj[key])) obj[key] = {}
+      if (Array.isArray(val)) {
+        if (!Array.isArray(obj[key])) obj[key] = []
+        obj[key] = obj[key].concat(val)
+      } else if (isObject(val)) {
+        if (!isObject(obj[key]) || Array.isArray(obj[key])) obj[key] = {}
         _deepAssign(obj[key], val)
-      } else {
+      } else if (val !== undefined) {
         obj[key] = val
       }
     }

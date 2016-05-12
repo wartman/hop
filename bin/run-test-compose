@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+require('../bootstrap')
+const Compose = require('../src/core/Compose').default
+const checkCompose = require('check-compose')
+
+checkCompose(Compose)

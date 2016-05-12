@@ -75,7 +75,11 @@ const Container = Stamp.init(function () {
    * @return {this}
    */
   addAlias(abstract, alias) {
-    this[ALIASES][alias] = this.getName(abstract)
+    const id = typeof abstract === 'string' ? abstract : ensureObjectId(abstract)
+    if (!this[BINDINGS][id]) {
+      this.bind(abstract)
+    }
+    this[ALIASES][alias] = id
     return this
   },
 

@@ -29,7 +29,7 @@ const Three = Injectable.inject({
 test('builds dependencies on unbound Injectables', t => {
   let c = Container()
   let two = c.build(Two)
-  t.ok(two.one)
+  t.truthy(two.one)
   t.is(two.fooBar(), 'foobar')
   t.is(two.one.foo(), 'foo')
 })
@@ -37,7 +37,7 @@ test('builds dependencies on unbound Injectables', t => {
 test('resolves dependencies on unbound Injectables with make', t => {
   let c = Container()
   let two = c.make(Two)
-  t.ok(two.one)
+  t.truthy(two.one)
   t.is(two.fooBar(), 'foobar')
   t.is(two.one.foo(), 'foo')
 })
@@ -72,7 +72,7 @@ test('creates new objects if bindings are not singletons', t => {
   let twoOne = c.build(Two)
   let twoTwo = c.build(Two)
   twoOne.diff = 'diff'
-  t.notSame(twoOne, twoTwo)
+  t.notDeepEqual(twoOne, twoTwo)
 })
 
 test('creates shared instancnes', t => {
@@ -81,7 +81,7 @@ test('creates shared instancnes', t => {
   let one = c.make(Two)
   let two = c.make(Two)
   one.diff = 'diff'
-  t.same(one, two)
+  t.deepEqual(one, two)
 })
 
 test('recursively builds dependencies', t => {
