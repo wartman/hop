@@ -1,0 +1,33 @@
+{
+  "name": "@wartman/rabbit",
+  "version": "0.0.1",
+  "description": "Stamp-based frontend framework built on Snabbdom",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "ava"
+  },
+  "author": "wartman",
+  "license": "ISC",
+  "devDependencies": {
+    "ava": "^0.14.0",
+    "check-compose": "^1.1.3",
+    "rollup": "^0.25.8",
+    "rollup-plugin-babel": "^2.4.0",
+    "rollup-plugin-node-builtins": "^1.0.4",
+    "rollup-plugin-node-resolve": "^1.5.0"
+  },
+  "dependencies": {
+    "app-module-path": "^1.0.6"
+  },
+  "ava": {
+    "files": [
+      "test/**/test-*.js"
+    ],
+    "require": [
+      "./bootstrap"
+    ]
+  }
+}
