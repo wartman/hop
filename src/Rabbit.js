@@ -1,13 +1,12 @@
 import Container from './core/Container'
 import Config from './support/Config'
-import ServiceProvider from './support/ServiceProvider'
 
 const Rabbit = Container.init(function (options = {}) {
   this.instance(Container, this)
   this.instance(Rabbit, this)
   this.addAlias(Rabbit, 'app')
-  this.singleton(Config, c => {
-    return new Config(options)
+  this.share(Config, c => {
+    return Config(options)
   })
   this.$services = []
 }).methods({
@@ -61,9 +60,6 @@ const Rabbit = Container.init(function (options = {}) {
     })
   }
 
-}).statics({
-  ServiceProvider,
-  Config
 })
 
 export default Rabbit

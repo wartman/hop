@@ -11,6 +11,7 @@
   },
   "author": "wartman",
   "license": "ISC",
+  "repository": "https://wartman@bitbucket.org/wartman/rabbit.git",
   "devDependencies": {
     "ava": "^0.14.0",
     "check-compose": "^1.1.3",
@@ -20,7 +21,10 @@
     "rollup-plugin-node-resolve": "^1.5.0"
   },
   "dependencies": {
-    "app-module-path": "^1.0.6"
+    "app-module-path": "^1.0.6",
+    "eventemitter3": "^1.2.0",
+    "hyperscript-helpers": "^2.1.1",
+    "snabbdom": "^0.5.0"
   },
   "ava": {
     "files": [

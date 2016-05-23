@@ -1,6 +1,8 @@
 import Rabbit from '../src/Rabbit'
+import ServiceProvider from '../src/support/ServiceProvider'
+import Config from '../src/support/Config'
 
-const LoggerService = Rabbit.ServiceProvider.methods({
+const LoggerService = ServiceProvider.methods({
 
   register() {
     this.app.bind('logger', c => console.log.bind(console))
@@ -8,10 +10,10 @@ const LoggerService = Rabbit.ServiceProvider.methods({
 
 })
 
-const HelloWorldService = Rabbit.ServiceProvider.methods({
+const HelloWorldService = ServiceProvider.methods({
 
   register() {
-    this.app.bind('hello', c => `hello ${c.make(Rabbit.Config).get('location')}`)
+    this.app.bind('hello', c => `hello ${c.make(Config).get('location')}`)
   },
 
   boot(next) {

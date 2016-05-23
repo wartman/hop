@@ -19,10 +19,10 @@ const Container = Stamp.init(function () {
    *
    * @param {string|object} abstract
    * @param {object|function|null} concrete
-   * @param {boolean} singleton
+   * @param {boolean} shared
    * @return {this}
    */
-  bind(abstract, concrete, singleton = false) {
+  bind(abstract, concrete, shared = false) {
     const abstractId = this.getName(abstract)
     const bindings = this[BINDINGS]
     if (!concrete) {
@@ -38,7 +38,7 @@ const Container = Stamp.init(function () {
     if (bindings[abstractId]) {
       return this
     }
-    this[BINDINGS][abstractId] = {concrete, singleton}
+    this[BINDINGS][abstractId] = {concrete, shared}
     return this
   },
 
@@ -56,13 +56,13 @@ const Container = Stamp.init(function () {
   },
 
   /**
-   * Bind a singleton
+   * Share an item (ensuring it is only resolved once)
    *
    * @param {string|object} abstract
    * @param {object|function|null} concrete
    * @retrun {this}
    */
-  singleton(abstract, concrete = null) {
+  share(abstract, concrete = null) {
     this.bind(abstract, concrete, true)
     return this
   },
@@ -109,7 +109,7 @@ const Container = Stamp.init(function () {
   },
 
   /**
-   * Check if the binding is a singleton
+   * Check if the binding is shared
    *
    * @param {object|string} abstract
    * @return {boolean}
@@ -117,17 +117,17 @@ const Container = Stamp.init(function () {
   isShared(abstract) {
     const id = this.getName(abstract)
     const bound = this[BINDINGS][id]
-    return !bound ? false : bound.singleton
+    return !bound ? false : bound.shared
   },
 
   /**
    * Resolve a binding.
    *
    * @param {object|string} abstract
-   * @param {mixed} args
+   * @param {object} params
    * @return {object}
    */
-  make(abstract, args = []) {
+  make(abstract, params = {}) {
     const bindings = this[BINDINGS]
     const instances = this[INSTANCES]
     const id = this.getName(abstract)
@@ -135,7 +135,7 @@ const Container = Stamp.init(function () {
       return instances[id]
     }
     const concrete = this.getConcrete(abstract)
-    const object = this.build(concrete, args)
+    const object = this.build(concrete, params)
     if (this.isShared(abstract)) {
       instances[id] = object
     }
@@ -147,25 +147,27 @@ const Container = Stamp.init(function () {
    *
    * @throws {Error} If a stamp or function is not passed to `concrete`
    * @param {Stamp|function} concrete
-   * @param {mixed} args
+   * @param {object} params
    * @return {object}
    */
-  build(concrete, args = []) {
+  build(concrete, params = {}) {
     if (!Stamp.isStamp(concrete)) {
       if (isFunction(concrete)) {
-        return concrete(this, args)
+        return concrete(this, params)
       }
       throw new Error('concrete MUST be a Stamp or a function')
     }
     if (!concrete.$isInjectable) {
-      return concrete({args})
+      return concrete(params)
     }
     const deps = concrete.$getDependencies()
-    const props = {args}
+    const finalParams = params
     Object.keys(deps).forEach(key => {
-      props[key] = this.make(deps[key])
+      if (!params[key]) {
+        finalParams[key] = this.make(deps[key], params)
+      }
     })
-    return concrete(props)
+    return concrete(finalParams)
   }
 
 })
