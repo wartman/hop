@@ -36,6 +36,8 @@ function makeSafe(vnode) {
 /**
  * A factory that returns an instance of the patcher.
  *
+ * @param {Object} options - Currently just accepts `api`, which might be an object that
+ *                           implements the same methods as `snabbdom/htmldomapi.js`
  * @return {snabbdom}
  */
 const Patch = function ({api} = {}) {

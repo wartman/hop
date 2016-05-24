@@ -6,8 +6,6 @@ const Component = Injectable.compose(
   EventEmitter
 ).inject({
   patch: Patch
-}).properties({
-  $changeEvent: 'change'
 }).init(function (options={}) {
   this.$ensureEl(options.el)
 }).methods({
@@ -19,6 +17,16 @@ const Component = Injectable.compose(
    */
   render() {
     return null
+  },
+
+  /**
+   * Check if the component should update. By default this simply returns true,
+   * but you can use this to skip unneeded updates.
+   *
+   * @return {Boolean}
+   */
+  shouldComponentUpdate() {
+    return true
   },
 
   /**
@@ -53,11 +61,11 @@ const Component = Injectable.compose(
   },
 
   /**
-   * Run the render method.
+   * Run the render method and use it to patch the parent element.
    *
    * @returns {void}
    */
-  $invokeRender() {
+  $renderAndPatchElement() {
     const vnodes = this.render()
     this.$patch(vnodes)
   }
