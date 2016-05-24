@@ -1,5 +1,5 @@
 import Stamp from '../core/Stamp'
-import combineReducers from './combineReducers'
+import CombineReducers from './CombineReducers'
 
 /**
  * Private symbols
@@ -18,7 +18,7 @@ const Store = Stamp.init(function ({initialState}={}) {
   if (!this[REDUCERS]) {
     throw new Error('Cannot initialize a store without a reducer')
   }
-  this[REDUCER_HANDLER] = combineReducers(this[REDUCERS])
+  this[REDUCER_HANDLER] = CombineReducers(this[REDUCERS])
   this[STATE] = initialState || {}
   this[LISTENERS] = []
   this[IS_DISPATCHING] = false
@@ -104,7 +104,7 @@ const Store = Stamp.init(function ({initialState}={}) {
    * @param {Object} reducers - Functions or Reduceables
    * @return {Stamp}
    */
-  reduces(reducers) {
+  connect(reducers) {
     const prevReducers = this.compose.properties
       ? this.compose.properties[REDUCERS] || {}
       : {}
@@ -113,6 +113,14 @@ const Store = Stamp.init(function ({initialState}={}) {
         [REDUCERS]: Object.assign({}, prevReducers, reducers)
       }
     })
+  },
+
+  actions(...actions) {
+    const reducers = {}
+    actions.forEach(action => {
+      reducers[action.getType()] = action
+    })
+    return this.connect(reducers)
   }
 
 })

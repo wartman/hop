@@ -1,4 +1,5 @@
 import Stamp from '../core/Stamp'
+import {required} from '../core/Props'
 
 const TYPE_NAME = Symbol('type-name')
 
@@ -8,57 +9,10 @@ const TYPE_NAME = Symbol('type-name')
  *    const Foo = Reduceable.type('foo')
  *  
  */
-const Reduceable = Stamp.statics({
+const Reduceable = Stamp.methods({
 
-  /**
-   * Set the type of action this Reduceable should check.
-   *
-   * @param {string} name
-   * @return {Stamp}
-   */
-  type(name) {
-    return this.compose({
-      propertyDescriptors: {
-        [TYPE_NAME]: {
-          value: name,
-          writeable: false,
-          enumerable: true
-        }
-      }
-    })
-  },
-
-  /**
-   * Convenience method to override the default handler.
-   *
-   * @param {Function} handle
-   * @return {Stamp}
-   */
-  handler(handle) {
-    return this.methods({handle})
-  }
-
-}).methods({
-
-  getType() {
-    return this[TYPE_NAME]
-  },
-
-  /**
-   * Update the state if the action type matches this Reduceable's type.
-   *
-   * @param {Object} state
-   * @param {Object} action
-   * @return {Object}
-   */
-  handle(state = null, action) {
-    if (action.type === this.getType()) {
-      // todo:
-      // Should intelligently handle data merging?
-      return action.data
-    }
-    return state
-  }
+  // not sure if this is the best way to handle things :P
+  reduce: required('reduce')
 
 }).compose({
 

@@ -4,10 +4,11 @@ import ServiceProvider from '../src/support/ServiceProvider'
 import Run from '../src/events/Run'
 import Component from '../src/view/Component'
 import Store from '../src/data/Store'
-import Reduceable from '../src/data/Reduceable'
+import Action from '../src/data/Action'
+import Wrap from '../src/data/reducers/Wrap'
 import {div, p} from '../src/view/elements'
 
-const Location = Reduceable.type('location')
+const Location = Action.type('location').compose(Wrap)
 
 const HelloWorld = Component.inject({
   store: Store
@@ -31,17 +32,16 @@ const HelloWorldService = ServiceProvider.methods({
     this.app.bind(HelloWorld)
     this.app.share(Location)
     this.app.share(Store, c => {
-      return Store.reduces({
-        location: c.make(Location)
-      }).new()
+      return Store.actions(Location()).new()
     })
   }
 
   boot(next) {
     this.app.listen(Run, event => {
       const store = this.app.make(Store)
+      const location = this.app.make(Location)
       const hello = this.app.make(HelloWorld, {el: div('.foo')})
-      store.dispatch({type: 'location', data: 'world'})
+      store.dispatch(location.send('world'))
     })
     next()
   }

@@ -16,13 +16,13 @@ function getUndefinedStateErrorMessage(key, action) {
  * @param {Object} reducers
  * @return {Function}
  */
-export default function combineReducers(reducers) {
+export default function CombineReducers(reducers) {
   const keys = Object.keys(reducers)
   const finals = {}
   keys.forEach(key => {
     const reducer = reducers[key]
     if (reducer.$isReduceable === true) {
-      finals[key] = (state, action) => reducer.handle(state, action)
+      finals[key] = (state, action) => reducer.reduce(state, action)
     } else if ('function' === typeof reducer) {
       finals[key] = reducer
     }
