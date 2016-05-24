@@ -30,8 +30,9 @@ const Rabbit = Container.init(function (options = {}) {
    * @return {Promise}
    */
   run() {
+    let services
     try {
-      this.$providers = this.$providers.map(serviceProvider => {
+      services = this.$services.map(serviceProvider => {
         let provider = this.make(serviceProvider)
         provider.register()
         return provider
@@ -45,7 +46,7 @@ const Rabbit = Container.init(function (options = {}) {
       const next = (err) => {
         if (err) reject(err)
         try {
-          let provider = this.$providers[idx]
+          let provider = services[idx]
           idx++
           if (provider) {
             provider.boot(next)
