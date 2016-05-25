@@ -108,6 +108,7 @@ const Store = Stamp.init(function ({initialState}={}) {
     const prevReducers = this.compose.properties
       ? this.compose.properties[REDUCERS] || {}
       : {}
+
     return this.compose({
       properties: {
         [REDUCERS]: Object.assign({}, prevReducers, reducers)

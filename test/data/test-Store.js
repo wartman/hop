@@ -1,7 +1,6 @@
 import test from 'ava'
 import Store from '../../src/data/Store'
-import Action from '../../src/data/Action'
-import Wrap from '../../src/data/reducers/Wrap'
+import Action, {Binding} from '../../src/data/Action'
 
 const StoreStub = Store.connect({
   foo(state = null, action) {
@@ -18,7 +17,9 @@ const StoreStub = Store.connect({
   }
 })
 
-const Bif = Action.type('bif').compose(Wrap)
+const Bif = Action.type('bif').actions({
+  rename: Binding('name', (state, name) => name ? name : state)
+})
 
 test('initialState sets the initial state', t => {
   const store = StoreStub({initialState: {foo: 'bar'}})
@@ -55,11 +56,12 @@ test('reducers can be extended', t => {
 
 test('uses reduceables', t => {
   const bif = Bif()
-  const store = StoreStub.connect({
-    bif: bif
-  }).new({initialState: {foo: 'bar', bar: 'bar', bif: 'bif'}})
+  const store = StoreStub.actions(bif).new({initialState: {foo: 'bar', bar: 'bar', bif: 'bif'}})
+
   t.deepEqual({foo: 'bar', bar: 'bar', bif: 'bif'}, store.getState())
-  store.dispatch(bif.send('changed'))
+
+  store.dispatch(bif.rename('changed'))
+  
   t.deepEqual({foo: 'bar', bar: 'bar', bif: 'changed'}, store.getState())
 })
 

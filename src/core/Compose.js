@@ -12,7 +12,7 @@ const isDescriptor = (obj) => isObject(obj)
  * @param {object} descriptor The information about the object the factory will be creating.
  * @returns {Function} The new factory function.
  */
-function createFactory (descriptor) {
+function createFactory(descriptor) {
   return function Stamp(options, ...args) {
     let obj = Object.create(descriptor.methods || {})
 

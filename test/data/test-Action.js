@@ -1,13 +1,11 @@
 import test from 'ava'
-import Action from '../../src/data/Action'
+import Action, {Binding} from '../../src/data/Action'
 
-const ActionStub = Action.type('foo').methods({
-  reduce(state, action) {
-    if (action.type === this.getType()) {
-      return action.payload
-    }
-    return state
-  }
+const ActionStub = Action.type('foo').actions({
+  rename: Binding('name', (state, name) => Object.assign({}, state, {name})),
+  renameWithTitle: Binding('name', 'title', (state, name, title) => {
+    return Object.assign({}, state, {name, title})
+  })
 })
 
 test('registers type', t => {
@@ -15,15 +13,31 @@ test('registers type', t => {
   t.is('foo', action.getType())
 })
 
-test('formats actions', t => {
+test('actions are bound correctly', t => {
   const action = ActionStub()
-  t.deepEqual({type: 'foo', payload: 'bar'}, action.send('bar'))
+  t.truthy(action.$hasAction('rename'))
 })
 
-test('uses provided reducer', t => {
+test('formats actions', t => {
   const action = ActionStub()
-  const data = {foo: 'bar'}
-  t.is('bar', action.reduce(data.foo, {type: 'bar', payload: 'bin'}))
-  t.is('changed', action.reduce(data.foo, action.send('changed')))
-  t.is('bar', data.foo)
+  const expected = {type: 'foo.rename', payload: {name: 'bar'}}
+  t.deepEqual(expected, action.$sendAction('rename', 'bar'))
+  t.deepEqual(expected, action.rename('bar'))
+})
+
+test('runs matching reducer', t => {
+  const action = ActionStub()
+  t.deepEqual({name: 'bar'}, action.reduce({name: 'foo'}, action.rename('bar')))
+})
+
+test('multiple params in an action are possible', t => {
+  const action = ActionStub()
+  const expected = {type: 'foo.renameWithTitle', payload: {name: 'bar', title: 'mr'}}
+  t.deepEqual(expected, action.$sendAction('renameWithTitle', ['bar', 'mr']))
+  t.deepEqual(expected, action.renameWithTitle('bar', 'mr'))
+})
+
+test('runs matching reducer with multiple params', t => {
+  const action = ActionStub()
+  t.deepEqual({name: 'bar', title: 'mr'}, action.reduce({name: 'foo'}, action.renameWithTitle('bar', 'mr')))
 })

@@ -4,11 +4,18 @@ import ServiceProvider from '../src/support/ServiceProvider'
 import Run from '../src/events/Run'
 import Component from '../src/view/Component'
 import Store from '../src/data/Store'
-import Action from '../src/data/Action'
-import Wrap from '../src/data/reducers/Wrap'
+import Action, {Binding} from '../src/data/Action'
+import Boolean from '../src/data/reducers/Boolean'
 import {div, p} from '../src/view/elements'
 
-const Location = Action.type('location').compose(Wrap)
+const Location = Action.type('location').actions({
+
+  change: Binding(
+    'location', 
+    (state, location) => Object.assign({}, state, {name: location})
+  )
+
+})
 
 const HelloWorld = Component.inject({
   store: Store
@@ -20,7 +27,7 @@ const HelloWorld = Component.inject({
   render() {
     const {location} = this.store.getState()
     return div('.hello', [
-      p(`Hello ${location}!`)
+      p(`Hello ${location.name}!`)
     ])
   }
 
@@ -41,7 +48,7 @@ const HelloWorldService = ServiceProvider.methods({
       const store = this.app.make(Store)
       const location = this.app.make(Location)
       const hello = this.app.make(HelloWorld, {el: div('.foo')})
-      store.dispatch(location.send('world'))
+      store.dispatch(location.change('world'))
     })
     next()
   }
