@@ -8,6 +8,7 @@ const Component = Injectable.compose(
   patch: Patch
 }).init(function (options={}) {
   this.$ensureEl(options.el)
+  this.state = {}
 }).methods({
 
   /**
@@ -25,8 +26,23 @@ const Component = Injectable.compose(
    *
    * @return {Boolean}
    */
-  shouldComponentUpdate() {
+  shouldUpdate() {
     return true
+  },
+
+  /**
+   * Update the Component's state and re-render it.
+   *
+   * @param {Object} state
+   * @return {this}
+   */
+  setState(state) {
+    this.state = Object.assign({}, this.state, state)
+    if (this.shouldUpdate()) {
+      // todo: before and after hooks?
+      this.$renderAndPatchElement()
+    }
+    return this
   },
 
   /**
@@ -37,7 +53,7 @@ const Component = Injectable.compose(
    * @returns {this}
    */
   $patch(vnodes) {
-    this.el = this.patch(this.el, vnodes)
+    this.patch(this.el, vnodes)
     return this
   },
 

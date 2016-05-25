@@ -9,7 +9,7 @@ const ServiceProvider = Injectable.inject({
     // ...
   },
 
-  build(next) {
+  boot(next) {
     next()
   }
 

@@ -2,10 +2,9 @@ import Rabbit from '../Rabbit'
 import ViewServiceProvider from '../src/view/ViewServiceProvider'
 import ServiceProvider from '../src/support/ServiceProvider'
 import Run from '../src/events/Run'
-import Component from '../src/view/Component'
 import Store from '../src/data/Store'
 import Action, {Binding} from '../src/data/Action'
-import Boolean from '../src/data/reducers/Boolean'
+import Component from '../src/view/Component'
 import {div, p} from '../src/view/elements'
 
 const Location = Action.type('location').actions({

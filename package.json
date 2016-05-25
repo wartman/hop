@@ -17,6 +17,7 @@
     "check-compose": "^1.1.3",
     "rollup": "^0.25.8",
     "rollup-plugin-babel": "^2.4.0",
+    "rollup-plugin-commonjs": "^2.2.1",
     "rollup-plugin-node-builtins": "^1.0.4",
     "rollup-plugin-node-resolve": "^1.5.0"
   },

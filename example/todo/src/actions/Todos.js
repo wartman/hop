@@ -1,11 +1,20 @@
-import Action, {Binding} from '../../../src/data/Action'
+import Action, {Binding} from '../../../../src/data/Action'
 
-const Todos = Action.type('todos').actions({
+const Todos = Action.init(function () {
+  this._id = 0
+}).type('todos').actions({
 
   add: Binding('todo', function (state, todo) {
     return [
       ...state,
-      this.makeTodo(todo)
+      this.updateTodo(todo)
+    ]
+  }),
+
+  update: Binding('todo', function(state, todo) {
+    return [
+      ...state,
+      this.updateTodo(todo)
     ]
   }),
 
@@ -17,9 +26,10 @@ const Todos = Action.type('todos').actions({
 
 }).methods({
 
-  makeTodo(todo) {
+  updateTodo(todo) {
+    const id = todo.id || this.uniqueId()
     return {
-      id: todo.id,
+      id: id,
       text: todo.text,
       completed: false
     }
@@ -32,6 +42,10 @@ const Todos = Action.type('todos').actions({
     return Object.assign({}, state, {
       completed: !state.completed
     })
+  },
+
+  uniqueId() {
+    return this._id++
   }
 
 })

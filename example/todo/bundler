@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+const rollup = require('rollup')
+const node = require('rollup-plugin-node-resolve')
+const babel = require('rollup-plugin-babel')
+const builtins = require('rollup-plugin-node-builtins')
+const cjs = require('rollup-plugin-commonjs')
+const path = require('path')
+const fs = require('fs')
+
+/**
+ * Run rollup and bundle the todo app.
+ *
+ * @param {object} options
+ * @returns {Promise}
+ */
+const bundle = function (options) {
+  if (!options) options = {}
+  options = Object.assign({
+    main: path.resolve(__dirname, './src/Todo.js')
+  }, options)
+  return rollup.rollup({
+    entry: options.main,
+    plugins: [
+      babel({
+        exclude: 'node_modules/**',
+        presets: [ "es2015-rollup" ]
+      }),
+      cjs(),
+      builtins(),
+      node()
+    ]
+  }).then(function (bundle) {
+    return bundle.generate({
+      format: 'iife',
+      moduleName: 'panels'
+    })
+  }).catch(function (err) {
+    console.error(err.message, err.pos, err.loc, err.codeFrame)
+  })
+}
+
+bundle({}).then(function (result) {
+  const dest = path.resolve(__dirname, './static/bundle.js')
+  fs.writeFile(dest, result.code, function (err) {
+    if (err) {
+      throw err
+    } else {
+      console.log('Code bundled to: ' + dest)
+    }
+  })
+})

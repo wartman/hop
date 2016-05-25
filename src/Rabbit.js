@@ -33,23 +33,26 @@ const Rabbit = Container.init(function (options = {}) {
     let services
     try {
       services = this.$services.map(serviceProvider => {
-        let provider = this.make(serviceProvider)
-        provider.register()
-        return provider
+        let service = this.make(serviceProvider)
+        service.register()
+        return service
       })
     } catch(e) {
       return new Promise((resolve, reject) => reject(e))
     }
 
-    let idx = 0
     return new Promise((resolve, reject) => {
       const next = (err) => {
-        if (err) reject(err)
+        if (err) {
+          return reject(err)
+        }
+        if (services.length <= 0) {
+          return resolve()
+        }
+        let service = services.pop()
         try {
-          let provider = services[idx]
-          idx++
-          if (provider) {
-            provider.boot(next)
+          if (service) {
+            service.boot(next)
           } else {
             resolve()
           }
