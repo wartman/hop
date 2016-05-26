@@ -14,12 +14,12 @@ const TodoItem = Component.inject({
 }).methods({
 
   render() {
+    console.log(this.state)
     const {todo, editing, key} = this.state
     let body
 
-    if (this.editing) {
+    if (editing) {
       body = TodoTextInput({
-        patch: this.patch,
         text: todo.text,
         newTodo: false,
         onSave: (text) => this.handleSave(todo.id, text)

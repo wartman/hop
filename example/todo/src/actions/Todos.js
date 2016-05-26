@@ -36,7 +36,7 @@ const Todos = Action.init(function () {
   },
 
   toggleTodo(state, action) {
-    if (action.id !== todo.id) {
+    if (action.id !== state.id) {
       return state
     }
     return Object.assign({}, state, {
