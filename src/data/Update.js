@@ -40,11 +40,11 @@ const Update = Stamp.properties({
    * This makes more sense if you're using the Update in a Store:
    *
    *    const foo = Foo()
-   *    const store = Store.actions(foo).new({foo: 1})
+   *    const store = Store.updates(foo).new({foo: 1})
    *    store.dispatch({type: 'foo.increment'}) // -> "2"
-   *    // Alternately, we can use the `increment` method on our Foo action
-   *    // (which just returns the same thing):
-   *    store.dispatch(foo.increment()) // -> "3"
+   *    // However, theres a better way to do this! We've attached our Update
+   *    // to a store, so it'll automatically dispatch when we call an action:
+   *    store.foo.increment() // -> "3"
    *
    * @param {Object} state
    * @param {Object} action
@@ -64,31 +64,36 @@ const Update = Stamp.properties({
     return state
   },
 
+  /**
+   * Attach this Update and all its actions to a store.
+   *
+   * @param {Store} store
+   * @return {this}
+   */
   attachTo(store) {
     this[STORE] = store
     return this
   },
 
   /**
-   * Format an action.
+   * Format an action and dispatch on the attached Store.
    *
    * @param {String} actionName
    * @param {Array} payload
-   * @return {Object}
+   * @return {this}
    */
   $sendAction(actionName, payload) {
+    if (!this[STORE]) {
+      throw new Error('The Update must be attached to a store before it can be used.')
+    }
     if (!this.$hasAction(actionName)) {
       throw new Error(`The action ${actionName} does not exist`)
     }
-    const action = {
+    this[STORE].dispatch({
       type: `${this.getType()}.${actionName}`,
       payload: this.$getObjectFromParamsForAction(actionName, payload)
-    }
-    if (this[STORE]) {
-      this[STORE].dispatch(action)
-      action.$sent = true
-    }
-    return action
+    })
+    return this
   },
 
   /**

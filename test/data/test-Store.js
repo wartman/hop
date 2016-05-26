@@ -60,9 +60,6 @@ test('uses reduceables', t => {
 
   t.deepEqual({foo: 'bar', bar: 'bar', bif: 'bif'}, store.getState())
 
-  store.dispatch(Bif().rename('changed'))
-  t.deepEqual({foo: 'bar', bar: 'bar', bif: 'changed'}, store.getState())
-
   store.bif.rename('changed again')
   t.deepEqual({foo: 'bar', bar: 'bar', bif: 'changed again'}, store.getState())
 })
