@@ -1,40 +1,34 @@
 import Store from '../../../../src/data/Store'
 import Todos from '../actions/Todos'
 import Component from '../../../../src/view/Component'
-import Reactive from '../../../../src/view/Reactive'
 import {section, ul} from '../../../../src/view/elements'
 import TodoItem from './TodoItem'
 import Header from './Header'
 
-const Main = Component.compose(
-  Reactive
-).inject({
+const Main = Component.tag('section').id('main').inject({
+  store: Store,
   todos: Todos
+}).init(function () {
+  this.state = this.store.getState()
+  this.store.subscribe(() => this.setState(this.store.getState()))
 }).methods({
 
   render() {
-    console.log('rendering main')
-
     const {todos, filter} = this.state
-    const filteredTodos = this.filterTodos(todos, filter)
+    const filteredTodos = this.filterTodos(todos, filter.value)
 
-    console.log(filteredTodos)
-
-    return section('.main#root', [
-      Header({
-        store: this.store,
-        todos: this.todos
-      }).render(),
+    return [
       ul('.todo-list', filteredTodos.map(todo =>
         TodoItem({
+          patch: this.patch,
           store: this.store,
           todos: this.todos,
           editing: false,
           todo, 
           key: todo.id
-        }).render()
+        })
       ))
-    ])
+    ]
   },
 
   filterTodos(todos, filter) {

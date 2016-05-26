@@ -1,7 +1,7 @@
 import Component from '../../../../src/view/Component'
 import {span, input, button} from '../../../../src/view/elements'
 
-const TodoTextInput = Component.init(function ({
+const TodoTextInput = Component.tag('span').init(function ({
   newTodo,
   onSave,
   text,
@@ -13,11 +13,11 @@ const TodoTextInput = Component.init(function ({
 
   render() {
     const {text, placeholder} = this.state
-    return span([
+    return [
       input('.add', {
         key: 'main-input',
         on: {
-          blur: this.handleBlur.bind(this),
+          // blur: this.handleBlur.bind(this),
           change: this.updateText.bind(this)
         },
         props: {
@@ -30,7 +30,7 @@ const TodoTextInput = Component.init(function ({
       button({
         on: { click: this.handleSubmit.bind(this) }
       }, ['Save'])
-    ])
+    ]
   },
 
   updateText(e) {

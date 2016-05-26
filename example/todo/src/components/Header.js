@@ -4,21 +4,24 @@ import {header, h1} from '../../../../src/view/elements'
 import TodoTextInput from './TodoTextInput'
 import Todos from '../actions/Todos'
 
-const Header = Component.inject({
+const Header = Component.tag('header').id('header').class({
+  header: true
+}).inject({
   store: Store,
   todos: Todos
 }).methods({
 
   render() {
-    return header('.header', [
+    return [
       h1('Todos'),
       TodoTextInput({
+        patch: this.patch,
         onSave: this.handleSave.bind(this),
         newTodo: true,
         text: '',
         placeholder: 'What needs doing?'
-      }).render()
-    ])
+      })
+    ]
   },
 
   handleSave(text) {

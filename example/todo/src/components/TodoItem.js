@@ -4,7 +4,7 @@ import Component from '../../../../src/view/Component'
 import {li, div, input, label, button} from '../../../../src/view/elements'
 import TodoTextInput from './TodoTextInput'
 
-const TodoItem = Component.inject({
+const TodoItem = Component.tag('li').inject({
   store: Store,
   todos: Todos
 }).init(function ({key, todo, editing} = {}) {
@@ -13,21 +13,37 @@ const TodoItem = Component.inject({
   this.state.editing = editing
 }).methods({
 
+  getClass() {
+    return {
+      todo: true,
+      completed: this.state.todo.completed,
+      editing: this.state.editing
+    }
+  },
+
+  getId() {
+    return 'todo-' + this.state.todo.id 
+  },
+
+  getKey() {
+    return this.state.key
+  },
+
   render() {
-    console.log(this.state)
     const {todo, editing, key} = this.state
     let body
 
     if (editing) {
       body = TodoTextInput({
+        patch: this.patch,
         text: todo.text,
         newTodo: false,
         onSave: (text) => this.handleSave(todo.id, text)
-      }).render()
+      })
     } else {
       body = div('.view', [
         input('.toggle', {
-          attrs: {
+          props: {
             type: 'checkbox',
             checked: todo.completed,
           },
@@ -40,19 +56,12 @@ const TodoItem = Component.inject({
         }, [
           todo.text
         ]),
-        button('.destroy', {on: {click: this.deleteTodo.bind(this)}})
+        button('.edit', {on: {click: this.handleDoubleClick.bind(this)}}, ['edit']),
+        button('.destroy', {on: {click: this.deleteTodo.bind(this)}}, ['delete'])
       ])
     }
 
-    return li({
-      key,
-      class: {
-        completed: todo.completed,
-        editing
-      }
-    }, [
-      body
-    ])
+    return body
   },
 
   completeTodo() {
@@ -75,9 +84,10 @@ const TodoItem = Component.inject({
     if (text.length === 0) {
       this.deleteTodo()
     } else {
+      this.state.todo.text = text
       this.updateTodo()
     }
-    this.setState({editing: false})
+    // this.setState({editing: false})
   }
 
 })

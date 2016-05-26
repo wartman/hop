@@ -20,6 +20,17 @@ export function isFunction(obj) {
   return tag === '[object Function]' || tag === '[object GeneratorFunction]'
 }
 
+export const uniqueId = (() => {
+  let _id = 0
+  return function uId(prefix='') {
+    _id++
+    if (prefix.length > 0) {
+      return `${prefix}_${_id}`
+    }
+    return _id
+  }
+})()
+
 /**
  * Internal function to recursively assign properties to an object.
  *

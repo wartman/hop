@@ -12,10 +12,12 @@ const Todos = Action.init(function () {
   }),
 
   update: Binding('todo', function(state, todo) {
-    return [
-      ...state,
-      this.updateTodo(todo)
-    ]
+    return state.map(item => {
+      if (item.id === todo.id) {
+        return this.updateTodo(todo)
+      }
+      return item
+    })
   }),
 
   toggle: Binding('todo', function (state, todo) {
