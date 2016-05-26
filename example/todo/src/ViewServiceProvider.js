@@ -14,7 +14,6 @@ const ViewServiceProvider = ServiceProvider.methods({
 
   boot(next) {
     const app = this.app.make(App)
-    const patch = this.app.make(Patch)
     app.mount(Element('#root'))
     next()
   }

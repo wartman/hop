@@ -13,9 +13,7 @@ const StoreServiceProvider = ServiceProvider.methods({
       Filter()
     ).new({
       initialState: {
-        todos: [
-          {id: -1, text: 'foo', completed: false}
-        ],
+        todos: [],
         filter: {
           label: 'All',
           value: null

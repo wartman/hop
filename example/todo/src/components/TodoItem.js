@@ -52,12 +52,11 @@ const TodoItem = Component.tag('li').inject({
           }
         }),
         label({
-          on: {doubleClick: this.handleDoubleClick.bind(this)}
+          on: {dblclick: this.startEditing.bind(this)}
         }, [
           todo.text
         ]),
-        button('.edit', {on: {click: this.handleDoubleClick.bind(this)}}, ['edit']),
-        button('.destroy', {on: {click: this.deleteTodo.bind(this)}}, ['delete'])
+        button('.destroy', {on: {click: this.deleteTodo.bind(this)}})
       ])
     }
 
@@ -76,7 +75,7 @@ const TodoItem = Component.tag('li').inject({
     this.store.dispatch(this.todos.update(this.state.todo))
   },
 
-  handleDoubleClick() {
+  startEditing() {
     this.setState({editing: true})
   },
 

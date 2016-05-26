@@ -1,6 +1,6 @@
 import Component from '../../../../src/view/Component'
 import Store from '../../../../src/data/Store'
-import {button, p} from '../../../../src/view/elements'
+import {ul, li, a, span, strong} from '../../../../src/view/elements'
 import Filter from '../actions/Filter'
 
 const Footer = Component.tag('footer').id('footer').inject({
@@ -11,26 +11,63 @@ const Footer = Component.tag('footer').id('footer').inject({
   this.store.subscribe(() => this.setState(this.store.getState()))
 }).methods({
 
+  getClass() {
+    return {
+      footer: true
+    }
+  },
+
   render() {
-    const {filter} = this.state
+    const {todos, filter} = this.state
+    const filteredTodos = this.filterTodos(todos, false)
+    const count = filteredTodos.length
+
     return [
-      p([filter.label]),
-      button('.toggle', {on: {click: this.showActive.bind(this)}}, 'Active'),
-      button('.toggle', {on: {click: this.showCompleted.bind(this)}}, 'Completed'),
-      button('.toggle', {on: {click: this.showAll.bind(this)}}, 'All')
+      span('.todo-count', [
+        strong(count),
+        count === 1 ? ' item left' : ' items left'
+      ]),
+      ul('.filters', [
+        li([
+          a({
+            props: {href: "#all"},
+            class: {selected: filter.label === 'All'},
+            on: {click: this.showAll.bind(this)}
+          }, 'All')
+        ]),
+        li([
+          a({
+            props: {href: "#active"},
+            class: {selected: filter.label === 'Active'},
+            on: {click: this.showActive.bind(this)}
+          }, 'Active')
+        ]),
+        li([
+          a({
+            props: {href: "#completed"},
+            class: {selected: filter.label === 'Completed'},
+            on: {click: this.showCompleted.bind(this)}
+          }, 'Completed')
+        ])
+      ])
     ]
   },
 
-  showActive() {
+  showActive(e) {
     this.store.dispatch(this.filter.active())
   },
 
-  showCompleted() {
+  showCompleted(e) {
     this.store.dispatch(this.filter.completed())
   },
 
-  showAll() {
+  showAll(e) {
     this.store.dispatch(this.filter.all())
+  },
+
+  filterTodos(todos, filter) {
+    if (filter === null) return todos
+    return todos.filter(todo => todo.completed === filter)
   }
 
 })

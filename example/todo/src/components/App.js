@@ -4,7 +4,9 @@ import Header from './Header'
 import Footer from './Footer'
 import Main from './Main'
 
-const App = Component.id('root').inject({
+const App = Component.tag('section').class({
+  todoapp: true
+}).id('root').inject({
   app: Rabbit
 }).methods({
 

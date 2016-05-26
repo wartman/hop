@@ -3,7 +3,7 @@ import StoreServiceProvider from './StoreServiceProvider'
 import ViewServiceProvider from './ViewServiceProvider'
 
 const Todo = Rabbit({
-  // config?
+  placeholder: 'What needs to be done?'
 }).services(
   StoreServiceProvider,
   ViewServiceProvider

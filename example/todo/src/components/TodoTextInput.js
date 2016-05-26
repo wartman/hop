@@ -14,22 +14,27 @@ const TodoTextInput = Component.tag('span').init(function ({
   render() {
     const {text, placeholder} = this.state
     return [
-      input('.add', {
+      input({
         key: 'main-input',
+        class: {
+          'new-todo': this.state.newTodo,
+          'edit': !this.state.newTodo
+        },
         on: {
-          // blur: this.handleBlur.bind(this),
-          change: this.updateText.bind(this)
+          blur: this.handleBlur.bind(this),
+          change: this.updateText.bind(this),
+          keydown: this.handleSubmit.bind(this)
         },
         props: {
           value: text,
           placeholder: placeholder,
           type: 'text',
-          autoFocus: true
+          autofocus: true
         }
       }),
-      button({
-        on: { click: this.handleSubmit.bind(this) }
-      }, ['Save'])
+      // button({
+      //   on: { click: this.handleSubmit.bind(this) }
+      // }, ['Save'])
     ]
   },
 
@@ -38,9 +43,11 @@ const TodoTextInput = Component.tag('span').init(function ({
   },
 
   handleSubmit(e) {
-    this.onSave(this.state.text)
-    if (this.state.newTodo) {
-      this.setState({text: ''})
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      this.onSave(e.target.value)
+      if (this.state.newTodo) {
+        this.setState({text: ''})
+      }
     }
   },
 
