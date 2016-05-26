@@ -44,7 +44,9 @@ const Update = Stamp.properties({
    *    store.dispatch({type: 'foo.increment'}) // -> "2"
    *    // However, theres a better way to do this! We've attached our Update
    *    // to a store, so it'll automatically dispatch when we call an action:
-   *    store.foo.increment() // -> "3"
+   *    foo.increment() // -> "3"
+   *    // it's also now a property on `store`:
+   *    store.foo.increment() // -> "4"
    *
    * @param {Object} state
    * @param {Object} action
