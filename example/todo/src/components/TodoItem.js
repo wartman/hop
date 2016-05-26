@@ -1,12 +1,10 @@
 import Store from '../../../../src/data/Store'
-import Todos from '../actions/Todos'
 import Component from '../../../../src/view/Component'
 import {li, div, input, label, button} from '../../../../src/view/elements'
 import TodoTextInput from './TodoTextInput'
 
 const TodoItem = Component.tag('li').inject({
-  store: Store,
-  todos: Todos
+  store: Store
 }).init(function ({key, todo, editing} = {}) {
   this.state.key = key
   this.state.todo = todo
@@ -64,15 +62,15 @@ const TodoItem = Component.tag('li').inject({
   },
 
   completeTodo() {
-    this.store.dispatch(this.todos.toggle(this.state.todo))
+    this.store.todos.toggle(this.state.todo)
   },
 
   deleteTodo() {
-    this.store.dispatch(this.todos.remove(this.state.todo))
+    this.store.todos.remove(this.state.todo)
   },
 
   updateTodo() {
-    this.store.dispatch(this.todos.update(this.state.todo))
+    this.store.todos.update(this.state.todo)
   },
 
   startEditing() {

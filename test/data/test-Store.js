@@ -1,6 +1,6 @@
 import test from 'ava'
 import Store from '../../src/data/Store'
-import Action, {Binding} from '../../src/data/Action'
+import Update, {Action} from '../../src/data/Update'
 
 const StoreStub = Store.connect({
   foo(state = null, action) {
@@ -17,8 +17,8 @@ const StoreStub = Store.connect({
   }
 })
 
-const Bif = Action.type('bif').actions({
-  rename: Binding('name', (state, name) => name ? name : state)
+const Bif = Update.type('bif').actions({
+  rename: Action('name', (state, name) => name ? name : state)
 })
 
 test('initialState sets the initial state', t => {
@@ -56,13 +56,15 @@ test('reducers can be extended', t => {
 
 test('uses reduceables', t => {
   const bif = Bif()
-  const store = StoreStub.actions(bif).new({initialState: {foo: 'bar', bar: 'bar', bif: 'bif'}})
+  const store = StoreStub.updates(bif).new({initialState: {foo: 'bar', bar: 'bar', bif: 'bif'}})
 
   t.deepEqual({foo: 'bar', bar: 'bar', bif: 'bif'}, store.getState())
 
-  store.dispatch(bif.rename('changed'))
-  
+  store.dispatch(Bif().rename('changed'))
   t.deepEqual({foo: 'bar', bar: 'bar', bif: 'changed'}, store.getState())
+
+  store.bif.rename('changed again')
+  t.deepEqual({foo: 'bar', bar: 'bar', bif: 'changed again'}, store.getState())
 })
 
 test.cb('listeners are fired when the state is changed', t => {

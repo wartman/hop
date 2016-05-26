@@ -1,17 +1,17 @@
-import Action, {Binding} from '../../../../src/data/Action'
+import Update, {Action} from '../../../../src/data/Update'
 
-const Todos = Action.init(function () {
+const Todos = Update.type('todos').init(function () {
   this._id = 0
-}).type('todos').actions({
+}).actions({
 
-  add: Binding('todo', function (state, todo) {
+  add: Action('todo', function (state, todo) {
     return [
       ...state,
       this.updateTodo(todo)
     ]
   }),
 
-  update: Binding('todo', function(state, todo) {
+  update: Action('todo', function(state, todo) {
     return state.map(item => {
       if (item.id === todo.id) {
         return this.updateTodo(todo)
@@ -20,11 +20,11 @@ const Todos = Action.init(function () {
     })
   }),
 
-  toggle: Binding('todo', function (state, todo) {
+  toggle: Action('todo', function (state, todo) {
     return state.map(item => this.toggleTodo(item, todo))
   }),
 
-  remove: Binding('todo', (state, todo) => state.filter(item => item.id !== todo.id))
+  remove: Action('todo', (state, todo) => state.filter(item => item.id !== todo.id))
 
 }).methods({
 

@@ -5,10 +5,16 @@ import CombineReducers from './CombineReducers'
  * Private symbols
  */
 const REDUCERS = Symbol('reducers')
+const UPDATES = Symbol('updates')
 const REDUCER_HANDLER = Symbol('reduce')
 const STATE = Symbol('state')
 const LISTENERS = Symbol('listeners')
 const IS_DISPATCHING = Symbol('is-dispatching')
+
+function getProperty(props, name, def={}) {
+  if (!props || !props[name]) return def
+  return props[name]
+}
 
 /**
  * A store that holds the state tree. There should be only a single store in your app, and
@@ -17,6 +23,12 @@ const IS_DISPATCHING = Symbol('is-dispatching')
 const Store = Stamp.init(function ({initialState}={}) {
   if (!this[REDUCERS]) {
     throw new Error('Cannot initialize a store without a reducer')
+  }
+  if (this[UPDATES]) {
+    this[UPDATES].forEach(update => {
+      update.attachTo(this)
+      this[update.getType()] = update
+    })
   }
   this[REDUCER_HANDLER] = CombineReducers(this[REDUCERS])
   this[STATE] = initialState || {}
@@ -79,6 +91,13 @@ const Store = Stamp.init(function ({initialState}={}) {
     if (this[IS_DISPATCHING]) {
       throw new Error('Actions may not be dispatched by reducers')
     }
+    if(action.$sent) {
+      console.warn(
+        'An action was already sent! Remember, you don\'t need to pass' +
+        'an action to `dispatch` if it\'s been attached to a Store.'
+      )
+      return this
+    }
 
     try {
       this[IS_DISPATCHING] = true
@@ -105,23 +124,26 @@ const Store = Stamp.init(function ({initialState}={}) {
    * @return {Stamp}
    */
   connect(reducers) {
-    const prevReducers = this.compose.properties
-      ? this.compose.properties[REDUCERS] || {}
-      : {}
-
+    const props = this.compose.properties
     return this.compose({
       properties: {
-        [REDUCERS]: Object.assign({}, prevReducers, reducers)
+        [REDUCERS]: Object.assign({}, getProperty(props, REDUCERS), reducers)
       }
     })
   },
 
-  actions(...actions) {
+  updates(...updates) {
     const reducers = {}
-    actions.forEach(action => {
-      reducers[action.getType()] = action
+    const props = this.compose.properties
+    updates.forEach(update => {
+      reducers[update.getType()] = update
     })
-    return this.connect(reducers)
+    return this.compose({
+      properties: {
+        [REDUCERS]: Object.assign({}, getProperty(props, REDUCERS), reducers),
+        [UPDATES]: getProperty(props, UPDATES, []).concat(updates)
+      }
+    })
   }
 
 })

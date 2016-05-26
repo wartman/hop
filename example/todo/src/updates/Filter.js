@@ -1,22 +1,22 @@
-import Action, {Binding} from '../../../../src/data/Action'
+import Update, {Action} from '../../../../src/data/Update'
 
-const Filter = Action.type('filter').actions({
+const Filter = Update.type('filter').actions({
 
-  active: Binding((state) => {
+  active: Action((state) => {
     return {
       label: 'Active',
       value: false
     }
   }),
 
-  completed: Binding((state) => {
+  completed: Action((state) => {
     return {
       label: 'Completed',
       value: true
     }
   }),
 
-  all: Binding((state) => {
+  all: Action((state) => {
     return {
       label: 'All',
       value: null

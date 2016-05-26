@@ -1,11 +1,9 @@
 import Component from '../../../../src/view/Component'
 import Store from '../../../../src/data/Store'
 import {ul, li, a, span, strong} from '../../../../src/view/elements'
-import Filter from '../actions/Filter'
 
 const Footer = Component.tag('footer').id('footer').inject({
-  store: Store,
-  filter: Filter
+  store: Store
 }).init(function () {
   this.state = this.store.getState()
   this.store.subscribe(() => this.setState(this.store.getState()))
@@ -54,15 +52,15 @@ const Footer = Component.tag('footer').id('footer').inject({
   },
 
   showActive(e) {
-    this.store.dispatch(this.filter.active())
+    this.store.filter.active()
   },
 
   showCompleted(e) {
-    this.store.dispatch(this.filter.completed())
+    this.store.filter.completed()
   },
 
   showAll(e) {
-    this.store.dispatch(this.filter.all())
+    this.store.filter.all()
   },
 
   filterTodos(todos, filter) {

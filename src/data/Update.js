@@ -2,11 +2,12 @@ import Stamp from '../core/Stamp'
 
 const TYPE = Symbol('type')
 const ACTIONS = Symbol('actions')
+const STORE = Symbol('store')
 
 /**
  * Defines actions and the reducers that should handle them.
  */
-const Action = Stamp.properties({
+const Update = Stamp.properties({
   
   [TYPE]: 'none',
   [ACTIONS]: {}
@@ -15,7 +16,7 @@ const Action = Stamp.properties({
 
   /**
    * Get the type this action should be bound to. This will map to the
-   * matching key in any Store this Action is registered with.
+   * matching key in any Store this Update is registered with.
    *
    * @return {string}
    */
@@ -27,8 +28,8 @@ const Action = Stamp.properties({
    * Run the reducer. Reducers are matched using a `type.action` syntax. For example,
    * take this action:
    *
-   *    const Foo = Action.type('foo').actions({
-   *      increment: Binding((state) => state++)
+   *    const Foo = Update.type('foo').actions({
+   *      increment: Action((state) => state++)
    *    })
    *
    * To run the bound reducer, you'd pass the following action:
@@ -36,7 +37,7 @@ const Action = Stamp.properties({
    *    const foo = Foo()
    *    foo.reduce(1, {type: 'foo.increment'}) // -> "2"
    *
-   * This makes more sense if you're using the Action in a Store:
+   * This makes more sense if you're using the Update in a Store:
    *
    *    const foo = Foo()
    *    const store = Store.actions(foo).new({foo: 1})
@@ -63,6 +64,11 @@ const Action = Stamp.properties({
     return state
   },
 
+  attachTo(store) {
+    this[STORE] = store
+    return this
+  },
+
   /**
    * Format an action.
    *
@@ -74,10 +80,15 @@ const Action = Stamp.properties({
     if (!this.$hasAction(actionName)) {
       throw new Error(`The action ${actionName} does not exist`)
     }
-    return {
+    const action = {
       type: `${this.getType()}.${actionName}`,
       payload: this.$getObjectFromParamsForAction(actionName, payload)
     }
+    if (this[STORE]) {
+      this[STORE].dispatch(action)
+      action.$sent = true
+    }
+    return action
   },
 
   /**
@@ -111,14 +122,14 @@ const Action = Stamp.properties({
    * This uses the `params` property for the matching action. For example,
    * say we've done this:
    *
-   *    const Foo = Action.type('foo').actions({
+   *    const Foo = Update.type('foo').actions({
    *      bar: {
    *        params: ['key'],
    *        reducer(state, key) { return Object.assign({}, state, {key}) }
    *      }
    *    })
    *
-   * (the above is the same as doing `bar: Binding('key', (state, key) => Object.assign({}, state, {key}))`)
+   * (the above is the same as doing `bar: Action('key', (state, key) => Object.assign({}, state, {key}))`)
    *
    * Thus:
    *
@@ -185,12 +196,12 @@ const Action = Stamp.properties({
   },
 
   /** 
-   * Add sub-actions to the Action.
+   * Add sub-actions to the Update.
    *
    * Each added action will automatically add a method to the Stamp that
    * returns a parsed action object. For example:
    *
-   *    const Foo = Action.type('foo').actions({
+   *    const Foo = Update.type('foo').actions({
    *      bar: {
    *        params: ['key'],
    *        reducer(state, key) { return Object.assign({}, state, {key})}
@@ -200,7 +211,7 @@ const Action = Stamp.properties({
    * Calling `foo.bar('bin')` will return `{type: 'foo.bar', payload: {key: 'bin'}}`
    *
    * All actions expect an object with the signature `{params: Array, reducer: Function}`. You
-   * can write this object by hand or use the `Binding` function to create one for you.
+   * can write this object by hand or use the `Action` function to create one for you.
    *
    * Another important note: `state` in the reducer is always the full property that the Action is
    * handling (`foo` in the above example).
@@ -249,10 +260,10 @@ const Action = Stamp.properties({
  * @param {mixed} ...params
  * @return {Object}
  */
-function Binding(...params) {
+function Action(...params) {
   const reducer = params.pop()
   return {params, reducer}
 }
 
-export default Action
-export {Binding}
+export default Update
+export {Action}
