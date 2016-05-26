@@ -91,13 +91,6 @@ const Store = Stamp.init(function ({initialState}={}) {
     if (this[IS_DISPATCHING]) {
       throw new Error('Actions may not be dispatched by reducers')
     }
-    if(action.$sent) {
-      console.warn(
-        'An action was already sent! Remember, you don\'t need to pass' +
-        'an action to `dispatch` if it\'s been attached to a Store.'
-      )
-      return this
-    }
 
     try {
       this[IS_DISPATCHING] = true
