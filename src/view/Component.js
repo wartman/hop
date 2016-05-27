@@ -1,23 +1,10 @@
 import Injectable from '../core/Injectable'
-import {uniqueId, isFunction} from '../core/util'
+import {uniqueId, isFunction, isObject} from '../core/util'
 import Patch from './Patch'
-import Element from './Element'
 
-/**
- * An internal helper function to create getter methods.
- *
- * @param {String} attr
- * @return {Function}
- */
-function makeGetAttrMethod(attr) {
-  return function (fn) {
-    if (!isFunction(fn)) {
-      const value = fn
-      fn = () => value
-    }
-    const name = `get${attr}`
-    return this.methods({[name]: fn})
-  }
+function getValue(value, context, def = null ) {
+  if (!value) return isFunction(def) ? def() : def
+  return isFunction(value) ? value.call(context) : value
 }
 
 /**
@@ -34,17 +21,21 @@ const Component = Injectable.inject({
    *
    * @return {String}
    */
-  getTag() {
-    return 'div'
+  getSel() {
+    const tag = getValue(this.node.tag, this, 'div')
+    const id = this.getId()
+    if (id) return tag + '#' + id
+    return tag
   },
 
   /**
-   * A unique identifier used internally by Snabbdom.
+   * Get the ID for the Component. If none is provided, a unique one will be
+   * generated
    *
-   * @return {String|null}
+   * @return {String}
    */
-  getKey() {
-    return null
+  getId() {
+    return getValue(this.node.id, this)
   },
 
   /**
@@ -55,20 +46,17 @@ const Component = Injectable.inject({
    * @return {Object}
    */
   getClass() {
-    return null
-  },
-
-  /**
-   * Get a unique ID for this component.
-   *
-   * @return {String}
-   */
-  getId() {
-    if (this.$id) {
-      return this.$id
+    const classes = getValue(this.node.class, this)
+    if (classes && !isObject(classes)) {
+      const obj = {}
+      if (Array.isArray(classes)) {
+        classes.forEach(cls => obj[cls] = true)
+        return obj
+      }
+      obj[classes] = true
+      return obj
     }
-    this.$id = uniqueId('rabbit')
-    return this.$id
+    return classes
   },
 
   /**
@@ -79,18 +67,25 @@ const Component = Injectable.inject({
    * @return {Object}
    */
   getData() {
-    return {}
+    return getValue(this.node.data, this, {})
   },
 
   /**
-   * Mount this Component on the provided element.
+   * Get attributes for this Component.
    *
-   * @param {HtmlElement} element
-   * @return {Void}
+   * @return {Object}
    */
-  mount(element) {
-    this.$element = element
-    this.update()
+  getAttrs() {
+    return getValue(this.node.attrs, this)
+  },
+
+  /**
+   * Get the key for this Component
+   *
+   * @return {mixed}
+   */
+  getKey() {
+    return getValue(this.node.key, this)
   },
 
   /**
@@ -102,20 +97,36 @@ const Component = Injectable.inject({
    * @return {VNode|Array}
    */
   render() {
-    // Empty array === nothing
-    return []
+    return getValue(this.node.children, this, [])
   },
 
   /**
-   * Re-render the component
+   * Mount this Component on the provided element.
+   *
+   * @param {HtmlElement} element
+   * @return {Void}
+   */
+  mount(element) {
+    this.patch(element, this)
+  },
+
+  /**
+   * Re-render the component.
+   *
+   * Note: `this.elm` is added to all VNodes by snabbdom. It points to the REAL DOM
+   * node the VNode is bound to. We get it for free because Snabbdom is treating our
+   * component like any other vnode.
    *
    * @return {Void}
    */
   update() {
-    if (!this.$element) {
-      this.$element = Element(this.getTag() + '#' + this.getId())
+    if (!this.elm) {
+      throw new Error(
+        'A Component must be mounted or added as part of a parent element' +
+        'before it can be updated.'
+      )
     }
-    this.$element = this.patch(this.$element, this).elm
+    this.patch(this.elm, this)
   },
 
   /**
@@ -132,20 +143,34 @@ const Component = Injectable.inject({
 
 }).statics({
 
-  tag: makeGetAttrMethod('Tag'),
-  id: makeGetAttrMethod('Id'),
-  class: makeGetAttrMethod('Class'),
-  data: makeGetAttrMethod('Data'),
-  body(render) {
-    return this.methods({render})
+  /**
+   * Define the VNode for this component.
+   *
+   * @param {Object} node
+   */
+  node(node) {
+    return this.compose({
+      properties: {node}
+    })
   }
-
+  
 }).compose({
+
+  properties: {
+
+    /**
+     * Default Node descriptors.
+     */
+    node: {
+      tag: 'div'
+    }
+
+  },
 
   /**
    * The following descriptors are used to mock a Vnode so that Snabbdom
    * can render the component. They should NOT be overwritten or manually 
-   * defined.
+   * defined. Use Component.node(...) instead.
    *
    * @see https://github.com/paldepind/snabbdom#virtual-node
    */
@@ -153,19 +178,17 @@ const Component = Injectable.inject({
 
     sel: {
       get() {
-        let id = this.getId()
-        if (id.length) {
-          id = '#' + id
-        }
-        return this.getTag() + id
+        return this.getSel()
       }
     },
 
     data: {
       get() {
-        return Object.assign({}, {
-          class: this.getClass()
+        const data = Object.assign({}, {
+          class: this.getClass(),
+          attrs: this.getAttrs()
         }, this.getData())
+        return data
       }
     },
 

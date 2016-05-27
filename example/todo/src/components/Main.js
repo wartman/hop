@@ -4,11 +4,14 @@ import {section, ul} from '../../../../src/view/elements'
 import TodoItem from './TodoItem'
 import Header from './Header'
 
-const Main = Component.tag('section').id('main').inject({
+const Main = Component.inject({
   store: Store
 }).init(function () {
   this.state = this.store.getState()
   this.store.subscribe(() => this.setState(this.store.getState()))
+}).node({
+  tag: 'section',
+  id: 'main'
 }).methods({
 
   render() {

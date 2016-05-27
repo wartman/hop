@@ -3,15 +3,21 @@ import Component from '../../../../src/view/Component'
 import {li, div, input, label, button} from '../../../../src/view/elements'
 import TodoTextInput from './TodoTextInput'
 
-const TodoItem = Component.tag('li').inject({
+const TodoItem = Component.inject({
   store: Store
 }).init(function ({key, todo, editing} = {}) {
   this.state.key = key
   this.state.todo = todo
   this.state.editing = editing
-}).methods({
+}).node({
+  
+  tag: 'li',
 
-  getClass() {
+  id() {
+    return 'todo-' + this.state.todo.id
+  },
+
+  class() {
     return {
       todo: true,
       completed: this.state.todo.completed,
@@ -19,13 +25,11 @@ const TodoItem = Component.tag('li').inject({
     }
   },
 
-  getId() {
-    return 'todo-' + this.state.todo.id 
-  },
-
-  getKey() {
+  key() {
     return this.state.key
-  },
+  }
+
+}).methods({
 
   render() {
     const {todo, editing, key} = this.state

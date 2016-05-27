@@ -2,18 +2,16 @@ import Component from '../../../../src/view/Component'
 import Store from '../../../../src/data/Store'
 import {ul, li, a, span, strong} from '../../../../src/view/elements'
 
-const Footer = Component.tag('footer').id('footer').inject({
+const Footer = Component.inject({
   store: Store
 }).init(function () {
   this.state = this.store.getState()
   this.store.subscribe(() => this.setState(this.store.getState()))
+}).node({
+  tag: 'footer',
+  id: 'footer',
+  class: 'footer'
 }).methods({
-
-  getClass() {
-    return {
-      footer: true
-    }
-  },
 
   render() {
     const {todos, filter} = this.state

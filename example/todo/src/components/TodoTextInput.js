@@ -1,7 +1,7 @@
 import Component from '../../../../src/view/Component'
 import {span, input, button} from '../../../../src/view/elements'
 
-const TodoTextInput = Component.tag('input').init(function ({
+const TodoTextInput = Component.init(function ({
   newTodo,
   onSave,
   text,
@@ -9,36 +9,41 @@ const TodoTextInput = Component.tag('input').init(function ({
 } = {}) {
   this.onSave = onSave
   this.state = {placeholder, text, newTodo}
-}).methods({
+}).node({
 
-  getClass() {
+  tag: 'input',
+
+  class() {
     return  {
       'new-todo': this.state.newTodo,
       'edit': !this.state.newTodo
     }
   },
 
-  getKey() {
-    return 'main-input'
+  key: 'main-input',
+
+  attrs() {
+    const {text, placeholder} = this.state
+    return {
+      value: text,
+      placeholder: placeholder,
+      type: 'text'
+    }
   },
 
-  getData() {
-    const {text, placeholder} = this.state
+  data() {
     return {
       on: {
         blur: this.handleBlur.bind(this),
         keydown: this.handleSubmit.bind(this)
       },
-      attrs: {
-        value: text,
-        placeholder: placeholder,
-        type: 'text'
-      },
       hook: {
         insert: vnode => vnode.elm.focus()
       }
     }
-  },
+  }
+
+}).methods({
 
   handleSubmit(e) {
     if (e.key === 'Enter' || e.keyCode === 13) {
