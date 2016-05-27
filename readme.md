@@ -75,8 +75,8 @@ store.connect({
 })
 ```
 
-The PersonReducer is now bound to the `person` property in the store, and will handle it 
-whenever we dispatch an action with the type `person`.
+The PersonReducer is now bound to the `person` property in the store, and will be run every time
+we call `store.dispatch` (no matter what `action.type` is). 
 
 ```js
 store.connect({
@@ -91,8 +91,31 @@ const {person} = store.getState()
 console.log(person.name) // => 'alice'
 ```
 
-But what if we want something more complex? We could use different functions
-for each reducer we want, but there's a better way.
+But what if we want something more complex? We could do this:
+
+```js
+function PersonReducer(state, action) {
+  switch(action.type) {
+    case 'person.add': 
+      return [
+        ...state,
+        action.payload.person
+      ] 
+    case 'person.update':
+      const person = action.payload.person
+      return state.map(item => {
+        if (item.id === id) {
+          return Object.assign({}, item, person)
+        }
+        return item
+      })
+    // etc
+    default: return state
+  }
+}
+```
+
+... but there's a better way
 
 
 Updates
