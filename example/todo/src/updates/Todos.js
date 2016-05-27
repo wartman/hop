@@ -24,7 +24,31 @@ const Todos = Update.type('todos').init(function () {
     return state.map(item => this.toggleTodo(item, todo))
   }),
 
-  remove: Action('todo', (state, todo) => state.filter(item => item.id !== todo.id))
+  sync: Action('todos', function (state, todos) {
+    const updated = state.map(original => {
+      const update = todos.find(todo => todo.id == original.id)
+      if (update) {
+        todos.splice(todos.indexOf(update), 1)
+        return update
+      }
+      return original
+    }).concat(todos).sort((a, b) => {
+      if (a.id < b.id) {
+        return -1
+      }
+      if (a.id > b.id) {
+        return 1
+      }
+      return 0
+    })
+    // make sure our Ids don't repeat.
+    this._id = updated[updated.length - 1].id + 1
+    return updated
+  }),
+
+  remove: Action('todo', (state, todo) => state.filter(item => item.id !== todo.id)),
+
+  removeCompleted: Action((state) => state.filter(item => item.completed === false))
 
 }).methods({
 

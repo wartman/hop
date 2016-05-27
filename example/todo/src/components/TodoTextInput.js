@@ -31,12 +31,15 @@ const TodoTextInput = Component.init(function ({
     }
   },
 
+  events() {
+    return {
+      blur: this.handleBlur.bind(this),
+      keydown: this.handleSubmit.bind(this)
+    }
+  },
+
   data() {
     return {
-      on: {
-        blur: this.handleBlur.bind(this),
-        keydown: this.handleSubmit.bind(this)
-      },
       hook: {
         insert: vnode => vnode.elm.focus()
       }

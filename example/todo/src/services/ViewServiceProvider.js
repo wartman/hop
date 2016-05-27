@@ -1,8 +1,8 @@
-import Patch from '../../../src/view/Patch'
-import ServiceProvider from '../../../src/support/ServiceProvider'
-import Element from '../../../src/view/Element'
-import Main from './components/Main'
-import App from './components/App'
+import Patch from '../../../../src/view/Patch'
+import ServiceProvider from '../../../../src/support/ServiceProvider'
+import Element from '../../../../src/view/Element'
+import Main from '../components/Main'
+import App from '../components/App'
 
 const ViewServiceProvider = ServiceProvider.methods({
 

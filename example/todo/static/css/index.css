@@ -368,3 +368,32 @@ html .clear-completed:active {
     bottom: 10px;
   }
 }
+
+/*
+  Rabbit:
+  Stuff we added for our server-sync example
+*/
+.spinner {
+  height: 20px;
+  line-height: 20px;
+  border-top: 1px solid #ededed;
+  padding: 10px 15px;
+  color: #777;
+}
+
+.sync-button {
+  color: rgba(175, 47, 47, 0.15);
+  margin: 3px;
+  padding: 3px 7px;
+  text-decoration: none;
+  border: 1px solid rgba(175, 47, 47, 0.1);
+  border-radius: 3px;
+  position: absolute;
+  top: -50px;
+  right: 0;
+  cursor: pointer;
+}
+
+.sync-button:hover {
+  border-color: rgba(175, 47, 47, 0.15);
+}

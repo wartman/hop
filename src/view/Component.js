@@ -91,6 +91,10 @@ const Component = Injectable.init(function ({patch} = {}) {
     return getValue(this.node.key, this)
   },
 
+  getEvents() {
+    return getValue(this.node.events, this)
+  },
+
   /**
    * Render the body of the component.
    *
@@ -189,7 +193,8 @@ const Component = Injectable.init(function ({patch} = {}) {
       get() {
         const data = Object.assign({}, {
           class: this.getClass(),
-          attrs: this.getAttrs()
+          attrs: this.getAttrs(),
+          on: this.getEvents()
         }, this.getData())
         return data
       }

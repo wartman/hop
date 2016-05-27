@@ -78,6 +78,19 @@ const Update = Stamp.properties({
   },
 
   /**
+   * Is this update is attached to a Store, this method will return the current state of
+   * the property the Update is managing.
+   *
+   * @return {Object}
+   */
+  getState() {
+    if (!this[STORE]) {
+      throw new Error('The Update must be attached to a store before it can be used.')
+    }
+    return this[STORE].getState()[this.getType()]
+  },
+
+  /**
    * Format an action and dispatch on the attached Store.
    *
    * @param {String} actionName
