@@ -4,11 +4,13 @@ import Store from '../../../../src/data/Store'
 import {header, h1} from '../../../../src/view/elements'
 import TodoTextInput from './TodoTextInput'
 
-const Header = Component.tag('header').id('header').class({
-  header: true
-}).inject({
+const Header = Component.inject({
   store: Store,
   config: Config
+}).node({
+  tag: 'header',
+  id: 'header',
+  class: 'header'
 }).methods({
 
   render() {
