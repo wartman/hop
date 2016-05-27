@@ -21,7 +21,6 @@ const Main = Component.inject({
     return [
       ul('.todo-list', filteredTodos.map(todo =>
         TodoItem({
-          patch: this.patch,
           store: this.store,
           editing: false,
           todo, 

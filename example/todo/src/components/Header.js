@@ -17,7 +17,6 @@ const Header = Component.inject({
     return [
       h1('todos'),
       TodoTextInput({
-        patch: this.patch,
         onSave: this.handleSave.bind(this),
         newTodo: true,
         text: '',

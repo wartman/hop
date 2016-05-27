@@ -20,4 +20,15 @@ const Patch = function () {
   ])
 }
 
+let PATCH_INSTANCE
+
+Patch.getDefault = function () {
+  if (!PATCH_INSTANCE) PATCH_INSTANCE = Patch()
+  return PATCH_INSTANCE
+}
+
+Patch.setDefault = function (patch) {
+  PATCH_INSTANCE = patch
+}
+
 export default Patch

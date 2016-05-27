@@ -37,7 +37,6 @@ const TodoItem = Component.inject({
 
     if (editing) {
       body = TodoTextInput({
-        patch: this.patch,
         text: todo.text,
         newTodo: false,
         onSave: (text) => this.handleSave(todo.id, text)

@@ -7,7 +7,7 @@ import App from './components/App'
 const ViewServiceProvider = ServiceProvider.methods({
 
   register() {
-    this.app.share(Patch)
+    this.app.share(Patch, c => Patch.getDefault())
     this.app.share(Main)
     this.app.share(App)
   },
