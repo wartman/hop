@@ -69,10 +69,6 @@ const TodoItem = Component.tag('li').inject({
     this.store.todos.remove(this.state.todo)
   },
 
-  updateTodo() {
-    this.store.todos.update(this.state.todo)
-  },
-
   startEditing() {
     this.setState({editing: true})
   },
@@ -81,10 +77,9 @@ const TodoItem = Component.tag('li').inject({
     if (text.length === 0) {
       this.deleteTodo()
     } else {
-      this.state.todo.text = text
-      this.updateTodo()
+      this.store.todos.update(id, {text})
     }
-    // this.setState({editing: false})
+    this.setState({editing: false})
   }
 
 })

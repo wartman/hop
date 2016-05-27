@@ -11,10 +11,10 @@ const Todos = Update.type('todos').init(function () {
     ]
   }),
 
-  update: Action('todo', function(state, todo) {
+  update: Action('id', 'todo', function(state, id, todo) {
     return state.map(item => {
-      if (item.id === todo.id) {
-        return this.updateTodo(todo)
+      if (item.id === id) {
+        return this.updateTodo(Object.assign({}, item, todo))
       }
       return item
     })
