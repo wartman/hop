@@ -99,10 +99,11 @@ const Component = Injectable.inject({
    * Important note: DO NOT PASS THIS METHOD TO `PATCH`. It won't work like you expect.
    * Instead, pass the entire Component to Patch.
    *
-   * @return {VNode|null}
+   * @return {VNode|Array}
    */
   render() {
-    return null
+    // Empty array === nothing
+    return []
   },
 
   /**

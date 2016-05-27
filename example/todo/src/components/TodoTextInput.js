@@ -1,7 +1,7 @@
 import Component from '../../../../src/view/Component'
 import {span, input, button} from '../../../../src/view/elements'
 
-const TodoTextInput = Component.tag('span').init(function ({
+const TodoTextInput = Component.tag('input').init(function ({
   newTodo,
   onSave,
   text,
@@ -11,35 +11,33 @@ const TodoTextInput = Component.tag('span').init(function ({
   this.state = {placeholder, text, newTodo}
 }).methods({
 
-  render() {
-    const {text, placeholder} = this.state
-    return [
-      input({
-        key: 'main-input',
-        class: {
-          'new-todo': this.state.newTodo,
-          'edit': !this.state.newTodo
-        },
-        on: {
-          blur: this.handleBlur.bind(this),
-          change: this.updateText.bind(this),
-          keydown: this.handleSubmit.bind(this)
-        },
-        props: {
-          value: text,
-          placeholder: placeholder,
-          type: 'text',
-          autofocus: true
-        }
-      }),
-      // button({
-      //   on: { click: this.handleSubmit.bind(this) }
-      // }, ['Save'])
-    ]
+  getClass() {
+    return  {
+      'new-todo': this.state.newTodo,
+      'edit': !this.state.newTodo
+    }
   },
 
-  updateText(e) {
-    this.setState({text: e.target.value})
+  getKey() {
+    return 'main-input'
+  },
+
+  getData() {
+    const {text, placeholder} = this.state
+    return {
+      on: {
+        blur: this.handleBlur.bind(this),
+        keydown: this.handleSubmit.bind(this)
+      },
+      attrs: {
+        value: text,
+        placeholder: placeholder,
+        type: 'text'
+      },
+      hook: {
+        insert: vnode => vnode.elm.focus()
+      }
+    }
   },
 
   handleSubmit(e) {
@@ -52,7 +50,6 @@ const TodoTextInput = Component.tag('span').init(function ({
   },
 
   handleBlur(e) {
-    this.updateText(e)
     if (!this.state.newTodo) {
       this.onSave(e.target.value)
     }

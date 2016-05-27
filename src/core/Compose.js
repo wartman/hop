@@ -32,6 +32,7 @@ function createFactory(descriptor) {
 
 /**
  * Returns a new stamp given a descriptor and a compose function implementation.
+ *
  * @param {object} [descriptor={}] The information about the object the stamp will be creating.
  * @param {Function} composeFunction The "compose" function implementation.
  * @returns {Function}
