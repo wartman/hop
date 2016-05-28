@@ -1,6 +1,13 @@
-import Update, {Action} from '../../../../src/data/Update'
+import Update, { Action } from '../../../../src/data/Update'
+import { StringType, NumberType, BoolType, ShapeOf, ArrayOf } from '../../../../src/data/Shape'
 
-const Todos = Update.type('todos').init(function () {
+const Todos = Update.type('todos').shape(ArrayOf(
+  ShapeOf({
+    id: NumberType().require(),
+    text: StringType().require(),
+    completed: BoolType().require()
+  })
+)).init(function () {
   this._id = 0
 }).actions({
 

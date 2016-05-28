@@ -1,8 +1,13 @@
 import Stamp from '../core/Stamp'
+import { isFunction } from '../core/util'
+import Shape from './Shape'
 
 const TYPE = Symbol('type')
 const ACTIONS = Symbol('actions')
 const STORE = Symbol('store')
+const SHAPE = Symbol('shape')
+// const ENV = process ? process.env.NODE_ENV || 'development' : 'development'
+const ENV = 'development'
 
 /**
  * Defines actions and the reducers that should handle them.
@@ -74,6 +79,9 @@ const Update = Stamp.properties({
    */
   attachTo(store) {
     this[STORE] = store
+    store.connect({
+      [this.getType()]: (state, action) => this.reduce(state, action)
+    })
     return this
   },
 
@@ -104,11 +112,15 @@ const Update = Stamp.properties({
     if (!this.$hasAction(actionName)) {
       throw new Error(`The action ${actionName} does not exist`)
     }
-    this[STORE].dispatch({
+    this[STORE].dispatch(this.$formatAction(actionName, payload))
+    return this
+  },
+
+  $formatAction(actionName, payload) {
+    return {
       type: `${this.getType()}.${actionName}`,
       payload: this.$getObjectFromParamsForAction(actionName, payload)
-    })
-    return this
+    }
   },
 
   /**
@@ -124,6 +136,9 @@ const Update = Stamp.properties({
   /**
    * Run the matching reducer for the given action.
    *
+   * @throws {Error} - If an the returned state has the wrong Shape and this is
+   *                   not in production mode.
+   *
    * @param {String} actionName
    * @param {Object} state
    * @param {Object} payload
@@ -133,7 +148,14 @@ const Update = Stamp.properties({
     const args = this.$getParamsFromObjectForAction(actionName, payload)
     args.unshift(state)
     const reduce = this.$getReducerForAction(actionName)
-    return reduce.apply(this, args)
+    const updatedState = reduce.apply(this, args)
+
+    if (this[SHAPE] && ENV !== 'production') {
+      const error = this[SHAPE].check(updatedState, 'store.'+this.getType())
+      if (error) throw error
+    }
+
+    return updatedState
   },
 
   /**
@@ -199,7 +221,6 @@ const Update = Stamp.properties({
 
   /**
    * Bind this action to a type. This maps to a matching property in the Store.
-   * See `CombineReducers` for how this is handled.
    *
    * @param {String} name
    */
@@ -252,23 +273,26 @@ const Update = Stamp.properties({
       },
       methods
     })
-  }
+  },
 
-}).compose({
-
-  propertyDescriptors: {
-    
-    /**
-     * Marks this as a reduceable.
-     *
-     * @var {boolean}
-     */
-    $isReduceable: {
-      value: true,
-      writeable: false,
-      enumerable: false
+  /**
+   * Define the expected shape for the updated resource.
+   *
+   * If provided, this Update will throw an error if an invalid shape is returned
+   * from a reducer (for performance, this is only done in dev mode).
+   *
+   * @param {Object|Shape} shape
+   * @return {Stamp}
+   */
+  shape(shape) {
+    if (!isFunction(shape.check)) {
+      shape = Shape({expectedShape: shape})
     }
-
+    return this.compose({
+      properties: {
+        [SHAPE]: shape
+      }
+    })
   }
 
 })

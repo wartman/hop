@@ -8,10 +8,11 @@ const StoreServiceProvider = ServiceProvider.methods({
 
   register() {
     this.app.share(Store, c => Store.updates(
-      Todos(),
-      Filter(),
-      Request()
+      Todos,
+      Filter,
+      Request
     ).new({
+      app: c,
       initialState: {
         todos: [],
         filter: {

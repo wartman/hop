@@ -34,7 +34,7 @@ const TodoApi = Injectable.inject({
     if (request.status == 'pending') {
       // mock up an API request
       setTimeout(() => {
-        // Tell our request that its been handled.
+        // Tell our request that it has been handled.
         this.store.request.received()
 
         // Sync up our Todos with our `server`

@@ -1,12 +1,13 @@
 import Stamp from '../core/Stamp'
-import CombineReducers from './CombineReducers'
+import Injectable from '../core/Injectable'
+import Container from '../core/Container'
+import { isFunction } from '../core/util'
 
 /**
  * Private symbols
  */
 const REDUCERS = Symbol('reducers')
 const UPDATES = Symbol('updates')
-const REDUCER_HANDLER = Symbol('reduce')
 const STATE = Symbol('state')
 const LISTENERS = Symbol('listeners')
 const IS_DISPATCHING = Symbol('is-dispatching')
@@ -20,31 +21,77 @@ function getProperty(props, name, def={}) {
  * A store that holds the state tree. There should be only a single store in your app, and
  * the only way to change its state is to call `dispatch` on it.
  */
-const Store = Stamp.init(function ({initialState}={}) {
+const Store = Injectable.inject({
+  app: Container
+}).init(function ({initialState}={}) {
+  if (this[UPDATES]) {
+    this[UPDATES].forEach(stamp => this.attachUpdate(stamp))
+  }
   if (!this[REDUCERS]) {
     throw new Error('Cannot initialize a store without a reducer')
   }
-  if (this[UPDATES]) {
-    this[UPDATES].forEach(update => {
-      update.attachTo(this)
-      this[update.getType()] = update
-    })
-  }
-  this[REDUCER_HANDLER] = CombineReducers(this[REDUCERS])
+  this[REDUCERS] = Object.assign({}, this[REDUCERS])
   this[STATE] = initialState || {}
   this[LISTENERS] = []
   this[IS_DISPATCHING] = false
 }).methods({
 
   /**
-   * Run the registered reducer.
+   * Connect reducers. Works the same as the static method.
+   *
+   * @param {Object} reducers
+   */
+  connect(reducers) {
+    this[REDUCERS] = Object.assign({}, this[REDUCERS], reducers)
+    return this
+  },
+
+  /**
+   * Attach an Update to this Store.
+   *
+   * @param {Stamp|object} update - Can either be an instance OR a stamp.
+   *                                Passing in a stamp is preferred, as it will
+   *                                be created using dependency injection.
+   * @return {this}
+   */
+  attachUpdate(update) {
+    if (Stamp.isStamp(update)) {
+      update = this.app.make(update)
+    }
+    if (!isFunction(update.attachTo)) {
+      throw new Error('Cannot attach an Update without an `attachTo` method')
+    }
+    update.attachTo(this)
+    this[update.getType()] = update
+    return this
+  },
+
+  /**
+   * Run the registered reducers.
    *
    * @param {Object} state - The current state
    * @param {Object} action - The action being dispatched
    * @return {Object} - The new state.
    */
   reduce(state, action) {
-    return this[REDUCER_HANDLER](state, action)
+    const reducers = this[REDUCERS]
+    const updatedState = {}
+    let hasChanged = false
+
+    Object.keys(reducers).forEach(key => {
+      const reducer = reducers[key]
+      const previousResource = state[key]
+      const updatedResource = reducer(previousResource, action)
+      if ('undefined' === typeof updatedResource) {
+        throw new Error(
+          `Given action ${action.type}, reducer "${key}" returned undefined. ` +
+          `To ignore an action, you must explicitly return the previous state.`
+        )
+      }
+      updatedState[key] = updatedResource
+      hasChanged = hasChanged || previousResource !== updatedResource
+    })
+    return hasChanged ? updatedState : state
   },
 
   /**
@@ -67,7 +114,6 @@ const Store = Stamp.init(function ({initialState}={}) {
       throw new Error('Listeners must be functions')
     }
     this[LISTENERS].push(listener)
-
     let isSubscribed = true
     return () => {
       if (!isSubscribed) return
@@ -126,14 +172,9 @@ const Store = Stamp.init(function ({initialState}={}) {
   },
 
   updates(...updates) {
-    const reducers = {}
     const props = this.compose.properties
-    updates.forEach(update => {
-      reducers[update.getType()] = update
-    })
     return this.compose({
       properties: {
-        [REDUCERS]: Object.assign({}, getProperty(props, REDUCERS), reducers),
         [UPDATES]: getProperty(props, UPDATES, []).concat(updates)
       }
     })

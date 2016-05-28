@@ -7,7 +7,7 @@ import {span} from '../../../../src/view/elements'
  *
  * We're listening only to the Request update on our store. This doesn't 
  * require us to know anything about how the request is being handled -- we
- * only care if its pending or not.
+ * only care if it's pending or not.
  */
 const Spinner = Component.inject({
   store: Store
