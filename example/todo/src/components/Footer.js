@@ -1,12 +1,10 @@
 import Component from '../../../../src/view/Component'
 import Store from '../../../../src/data/Store'
-import {ul, li, a, span, strong, button} from '../../../../src/view/elements'
+import { ul, li, a, span, strong, button } from '../../../../src/view/elements'
+import { ALL, ACTIVE, COMPLETED } from '../updates/Filter'
 
 const Footer = Component.inject({
   store: Store
-}).init(function () {
-  this.state = this.store.getState()
-  this.store.subscribe(() => this.setState(this.store.getState()))
 }).node({
   tag: 'footer',
   id: 'footer',
@@ -20,7 +18,7 @@ const Footer = Component.inject({
 
   render() {
     const {todos, filter} = this.state
-    const filteredTodos = this.filterTodos(todos, false)
+    const filteredTodos = this.filterTodos(todos, ACTIVE)
     const count = filteredTodos.length
 
     return [
@@ -58,7 +56,7 @@ const Footer = Component.inject({
         class: { 
           'clear-completed': true,
           hidden: (
-            this.filterTodos(todos, true).length === 0
+            this.filterTodos(todos, COMPLETED).length === 0
             || filter.label == 'Active'
           )
         },
@@ -85,7 +83,7 @@ const Footer = Component.inject({
   },
 
   filterTodos(todos, filter) {
-    if (filter === null) return todos
+    if (filter === 0) return todos
     return todos.filter(todo => todo.completed === filter)
   }
 

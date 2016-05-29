@@ -10,13 +10,13 @@ function getValue(value, context, def = null ) {
 /**
  * Components are the basic building blocks of Rabbit views.
  */
-const Component = Injectable.init(function ({patch} = {}) {
+const Component = Injectable.init(function ({patch, state} = {}) {
   if (patch) { 
     this.patch = patch
   } else {
     this.patch = Patch.getDefault()
   }
-  this.state = this.state || {}
+  this.state = (state || this.state) || {}
 }).methods({
 
   /**

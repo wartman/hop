@@ -1,5 +1,6 @@
 import Injectable from '../../../../src/core/Injectable'
 import Store from '../../../../src/data/Store'
+import { ALL, ACTIVE, COMPLETED } from '../updates/Filter'
 
 /**
  * Here's an example of how we might handle a request to an API.
@@ -39,9 +40,9 @@ const TodoApi = Injectable.inject({
 
         // Sync up our Todos with our `server`
         this.store.todos.sync([
-          {id: 1, text: 'Do a Thing', completed: false},
-          {id: 2, text: 'And another', completed: false},
-          {id: 3, text: 'Ok?', completed: false}
+          {id: 1, text: 'Do a Thing', completed: ACTIVE},
+          {id: 2, text: 'And another', completed: ACTIVE},
+          {id: 3, text: 'Ok?', completed: ACTIVE}
         ])
       }, 1000)
     }

@@ -1,5 +1,5 @@
 import Component from '../../../../src/view/Component'
-import {span, input, button} from '../../../../src/view/elements'
+import { span, input, button } from '../../../../src/view/elements'
 
 const TodoTextInput = Component.init(function ({
   newTodo,

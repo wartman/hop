@@ -1,7 +1,8 @@
 import Store from '../../../../src/data/Store'
 import Component from '../../../../src/view/Component'
-import {li, div, input, label, button} from '../../../../src/view/elements'
+import { li, div, input, label, button } from '../../../../src/view/elements'
 import TodoTextInput from './TodoTextInput'
+import { COMPLETED } from '../updates/Filter'
 
 const TodoItem = Component.inject({
   store: Store
@@ -20,7 +21,7 @@ const TodoItem = Component.inject({
   class() {
     return {
       todo: true,
-      completed: this.state.todo.completed,
+      completed: this.state.todo.completed == COMPLETED,
       editing: this.state.editing
     }
   },
@@ -46,7 +47,7 @@ const TodoItem = Component.inject({
         input('.toggle', {
           props: {
             type: 'checkbox',
-            checked: todo.completed,
+            checked: todo.completed == COMPLETED,
           },
           on: {
             change: this.completeTodo.bind(this)

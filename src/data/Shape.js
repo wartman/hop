@@ -57,7 +57,7 @@ const TypeChecker = Stamp.compose(
     const value = props[key]
     const type = getType(value)
     const expectedType = this.expectedType
-    if (type !== expectedType) {
+    if (type !== expectedType && type !== 'undefined') {
       const preciseType = getPreciseType(value)
       return new Error(
         `Invalid \`${propFullName}\` of type ` +

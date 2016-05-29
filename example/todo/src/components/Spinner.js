@@ -1,6 +1,6 @@
 import Component from '../../../../src/view/Component'
 import Store from '../../../../src/data/Store'
-import {span} from '../../../../src/view/elements'
+import { span } from '../../../../src/view/elements'
 
 /**
  * Here's an example of how a spinner might work.

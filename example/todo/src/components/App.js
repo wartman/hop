@@ -1,25 +1,29 @@
 import Rabbit from '../../../../src/Rabbit'
 import Component from '../../../../src/view/Component'
-import {div} from '../../../../src/view/elements'
+import { section, footer, p, a } from '../../../../src/view/elements'
 import Header from './Header'
-import Footer from './Footer'
 import Main from './Main'
 import Spinner from './Spinner'
 
 const App = Component.inject({
   app: Rabbit
 }).node({
-  tag: 'section',
-  id: 'root',
-  class: 'todoapp'
+  tag: 'main',
+  id: 'root'
 }).methods({
 
   render() {
     return [
-      this.app.make(Header),
-      this.app.make(Main),
-      this.app.make(Footer),
-      this.app.make(Spinner)
+      section('.todoapp', [
+        this.app.make(Header),
+        this.app.make(Main),
+        this.app.make(Spinner)
+      ]),
+      footer('.info', [
+        p('Double-click to edit a todo'),
+        p(['Written by ',  a({attrs: {href: 'http://shipwreckplanet.com'}}, 'wartman')]),
+        p(['Part of ', a({attrs: {href: 'http://todomvc.com'}}, 'TodoMVC')])
+      ])
     ]
   }
 

@@ -1,8 +1,9 @@
 import Store from '../../../../src/data/Store'
 import Component from '../../../../src/view/Component'
-import {section, ul} from '../../../../src/view/elements'
+import { section, ul } from '../../../../src/view/elements'
 import TodoItem from './TodoItem'
-import Header from './Header'
+import Footer from './Footer'
+import { ALL, ACTIVE, COMPLETED } from '../updates/Filter'
 
 const Main = Component.inject({
   store: Store
@@ -26,12 +27,16 @@ const Main = Component.inject({
           todo, 
           key: todo.id
         })
-      ))
+      )),
+      Footer({
+        store: this.store,
+        state: this.state
+      })
     ]
   },
 
   filterTodos(todos, filter) {
-    if (filter === null) return todos
+    if (filter === ALL) return todos
     return todos.filter(todo => todo.completed === filter)
   }
 

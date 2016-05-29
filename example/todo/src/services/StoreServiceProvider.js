@@ -3,6 +3,7 @@ import ServiceProvider from '../../../../src/support/ServiceProvider'
 import Todos from '../updates/Todos'
 import Filter from '../updates/Filter'
 import Request from '../updates/Request'
+import { ALL } from '../updates/Filter'
 
 const StoreServiceProvider = ServiceProvider.methods({
 
@@ -17,7 +18,7 @@ const StoreServiceProvider = ServiceProvider.methods({
         todos: [],
         filter: {
           label: 'All',
-          value: null
+          value: ALL
         },
         request: {
           status: 'complete'

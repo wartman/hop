@@ -1,13 +1,14 @@
 import Update, { Action } from '../../../../src/data/Update'
-import { StringType, NumberType, BoolType, ShapeOf, ArrayOf } from '../../../../src/data/Shape'
+import { StringType, NumberType, ShapeOf, ArrayOf } from '../../../../src/data/Shape'
+import { ACTIVE, COMPLETED } from './Filter'
 
-const Todos = Update.type('todos').shape(ArrayOf(
-  ShapeOf({
+const Todos = Update.type('todos').shape(
+  ArrayOf(ShapeOf({
     id: NumberType().require(),
     text: StringType().require(),
-    completed: BoolType().require()
-  })
-)).init(function () {
+    completed: NumberType().require()
+  }))
+).init(function () {
   this._id = 0
 }).actions({
 
@@ -55,7 +56,7 @@ const Todos = Update.type('todos').shape(ArrayOf(
 
   remove: Action('todo', (state, todo) => state.filter(item => item.id !== todo.id)),
 
-  removeCompleted: Action((state) => state.filter(item => item.completed === false))
+  removeCompleted: Action((state) => state.filter(item => item.completed == ACTIVE))
 
 }).methods({
 
@@ -64,7 +65,7 @@ const Todos = Update.type('todos').shape(ArrayOf(
     return {
       id: id,
       text: todo.text,
-      completed: false
+      completed: ACTIVE
     }
   },
 
@@ -73,7 +74,7 @@ const Todos = Update.type('todos').shape(ArrayOf(
       return state
     }
     return Object.assign({}, state, {
-      completed: !state.completed
+      completed: state.completed == ACTIVE ? COMPLETED : ACTIVE
     })
   },
 
