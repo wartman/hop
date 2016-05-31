@@ -173,7 +173,8 @@ const Store = Injectable.inject({
    * Attach Updates to the Store
    *
    * @param {Update} updates
-   * 
+   * @return {Stamp}
+   */
   updates(...updates) {
     const props = this.compose.properties
     return this.compose({
