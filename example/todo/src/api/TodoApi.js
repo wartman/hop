@@ -1,5 +1,5 @@
-import Injectable from '../../../../src/core/Injectable'
-import Store from '../../../../src/data/Store'
+import { Injectable } from '../../../../core'
+import { Store } from '../../../../data'
 import { ALL, ACTIVE, COMPLETED } from '../updates/Filter'
 
 /**

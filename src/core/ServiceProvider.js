@@ -1,5 +1,5 @@
-import Injectable from '../core/Injectable'
-import Container from '../core/Container'
+import Injectable from './Injectable'
+import Container from './Container'
 
 const ServiceProvider = Injectable.inject({
   app: Container

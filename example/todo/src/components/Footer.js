@@ -1,6 +1,5 @@
-import Component from '../../../../src/view/Component'
-import Store from '../../../../src/data/Store'
-import { ul, li, a, span, strong, button } from '../../../../src/view/elements'
+import { Store } from '../../../../data'
+import { Component, ul, li, a, span, strong, button } from '../../../../view'
 import { ALL, ACTIVE, COMPLETED } from '../updates/Filter'
 
 const Footer = Component.inject({

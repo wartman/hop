@@ -1,17 +1,17 @@
-import Container from './core/Container'
-import Config from './support/Config'
+import Container from './Container'
+import Config from './Config'
 
 /**
  * The main entry point and service container for Rabbit.
  *
- * The Rabbit initializer should accept your configuration options, passed in
+ * The Application initializer should accept your configuration options, passed in
  * as a plain JS object. You can access the configuration later using by
  * resolving `Config` from the service container.
  */
-const Rabbit = Container.init(function (options = {}) {
+const Application = Container.init(function (options = {}) {
   this.instance(Container, this)
-  this.instance(Rabbit, this)
-  this.addAlias(Rabbit, 'app')
+  this.instance(Application, this)
+  this.addAlias(Application, 'app')
   this.share(Config, c => {
     return Config(options)
   })
@@ -73,4 +73,4 @@ const Rabbit = Container.init(function (options = {}) {
 
 })
 
-export default Rabbit
+export default Application

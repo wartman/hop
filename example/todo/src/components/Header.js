@@ -1,7 +1,6 @@
-import Component from '../../../../src/view/Component'
-import Config from '../../../../src/support/Config'
-import Store from '../../../../src/data/Store'
-import { header, h1, button } from '../../../../src/view/elements'
+import { Config } from '../../../../core'
+import { Store } from '../../../../data'
+import { Component, header, h1, button } from '../../../../view'
 import TodoTextInput from './TodoTextInput'
 
 const Header = Component.inject({

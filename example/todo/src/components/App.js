@@ -1,12 +1,11 @@
-import Rabbit from '../../../../src/Rabbit'
-import Component from '../../../../src/view/Component'
-import { section, footer, p, a } from '../../../../src/view/elements'
+import { Application } from '../../../../core'
+import { Component, section, footer, p, a } from '../../../../view'
 import Header from './Header'
 import Main from './Main'
 import Spinner from './Spinner'
 
 const App = Component.inject({
-  app: Rabbit
+  app: Application
 }).node({
   tag: 'main',
   id: 'root'

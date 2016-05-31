@@ -1,6 +1,5 @@
-import Store from '../../../../src/data/Store'
-import Component from '../../../../src/view/Component'
-import { li, div, input, label, button } from '../../../../src/view/elements'
+import { Store } from '../../../../data'
+import { Component, li, div, input, label, button } from '../../../../view'
 import TodoTextInput from './TodoTextInput'
 import { COMPLETED } from '../updates/Filter'
 

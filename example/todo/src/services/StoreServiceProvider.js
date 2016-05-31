@@ -1,5 +1,5 @@
-import Store from '../../../../src/data/Store'
-import ServiceProvider from '../../../../src/support/ServiceProvider'
+import { ServiceProvider } from '../../../../core'
+import { Store } from '../../../../data'
 import Todos from '../updates/Todos'
 import Filter from '../updates/Filter'
 import Request from '../updates/Request'

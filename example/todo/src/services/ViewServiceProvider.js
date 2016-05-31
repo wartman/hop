@@ -1,6 +1,5 @@
-import Patch from '../../../../src/view/Patch'
-import ServiceProvider from '../../../../src/support/ServiceProvider'
-import Element from '../../../../src/view/Element'
+import { ServiceProvider } from '../../../../core'
+import { Patch, Element } from '../../../../view'
 import Main from '../components/Main'
 import App from '../components/App'
 

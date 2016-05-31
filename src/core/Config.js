@@ -1,4 +1,4 @@
-import Stamp from '../core/Stamp'
+import Stamp from './Stamp'
 
 /**
  * Configuration store.

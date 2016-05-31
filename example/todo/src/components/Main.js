@@ -1,6 +1,5 @@
-import Store from '../../../../src/data/Store'
-import Component from '../../../../src/view/Component'
-import { section, ul } from '../../../../src/view/elements'
+import { Store } from '../../../../data'
+import { Component, section, ul } from '../../../../view'
 import TodoItem from './TodoItem'
 import Footer from './Footer'
 import { ALL, ACTIVE, COMPLETED } from '../updates/Filter'

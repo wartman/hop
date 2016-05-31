@@ -1,4 +1,4 @@
-import ServiceProvider from '../../../../src/support/ServiceProvider'
+import { ServiceProvider } from '../../../../core'
 import TodoApi from '../api/TodoApi'
 
 const ApiServiceProvider = ServiceProvider.methods({

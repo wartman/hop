@@ -98,7 +98,7 @@ You'd then run your app something like this:
 import Rabbit from 'wartman/rabbit'
 import ViewServiceProvider from './providers/ViewServiceProvider'
 
-Rabbit({
+Rabbit.Application({
   // config here
 }).services(
   ViewServiceProvider
@@ -118,9 +118,9 @@ The simplest way to use them is via the `connect` method on `Store`, which creat
 
 ```js
 
-import { Data } from 'wartman/rabbit'
+import { Store } from 'wartman/rabbit/data'
 
-const MyStore = Data.Store.connect({
+const MyStore = Store.connect({
   foo(state, action) {
     switch(action.type) {
       case 'foo.bar': return 'bar'
@@ -152,10 +152,10 @@ is so important, Rabbit Updates can validate that for you too.
 
 ```js
 
-import { Data } from 'wartman/rabbit'
+import { Update, Shapes, Action } from 'wartman/rabbit/data'
 
-const Foo = Data.Update.type('foo').shape({
-  value: Data.Shape.StringType().require()
+const Foo = Update.type('foo').shape({
+  value: Shapes.StringType().require()
 }).actions({
     
   set: Action('value', (store, value) => {
@@ -172,10 +172,10 @@ We can add Updates to our Store with the `updates` method -- AND we'll get some 
 
 ```js
 
-import { Data } from 'wartman/rabbit'
+import { Store } from 'wartman/rabbit/data'
 import Foo from '../updates/Foo'
 
-const MyStore = Data.Store.updates(Foo)
+const MyStore = Store.updates(Foo)
 
 export default MyStore
 
@@ -198,11 +198,13 @@ This section is still very much in progress, but here's an example:
 
 ```js
 
-import { View, Data, Config } from 'wartman/rabbit'
+import { Config } from 'wartman/rabbit/core'
+import { Store } from 'wartman/rabbit/data'
+import { Component, h1, button, header } from 'wartman/rabbit/view'
 import TodoTextInput from './TodoTextInput'
 
-const Header = View.Component.inject({
-  store: Data.Store,
+const Header = Component.inject({
+  store: Store,
   config: Config
 }).node({
   tag: 'header',
@@ -211,8 +213,6 @@ const Header = View.Component.inject({
 }).methods({
 
   render() {
-    const { header, h1, button } = View.elements
-
     return [
       h1('todos'),
 

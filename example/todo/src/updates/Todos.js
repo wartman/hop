@@ -1,12 +1,11 @@
-import Update, { Action } from '../../../../src/data/Update'
-import { StringType, NumberType, ArrayOfShape } from '../../../../src/data/Shape'
+import { Update, Action, Shapes } from '../../../../data'
 import { ACTIVE, COMPLETED } from './Filter'
 
 const Todos = Update.type('todos').shape(
-  ArrayOfShape({
-    id: NumberType().require(),
-    text: StringType().require(),
-    completed: NumberType().require()
+  Shapes.ArrayOfShape({
+    id: Shapes.NumberType().require(),
+    text: Shapes.StringType().require(),
+    completed: Shapes.NumberType().require()
   })
 ).init(function () {
   this._id = 0
