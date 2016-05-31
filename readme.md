@@ -42,7 +42,7 @@ Dependency injection is pretty simple:
 
 ```js
 
-import { Injectable, Container } from 'wartman/rabbit'
+import { Injectable, Container } from 'wartman/rabbit/core'
 import MyDep from './MyDep'
 
 const Foo = Injectable.inject({
@@ -68,19 +68,20 @@ In your app, you should use `ServiceProviders` to provide everything. Here's wha
 
 ```js
 
-import { ServiceProvider, View } from 'wartman/rabbit'
+import { ServiceProvider } from 'wartman/rabbit/core'
+import { Element, Patch } from 'wartman/rabbit/view'
 import MyApp from '../components/MyApp'
 
 const ViewServiceProvider = ServiceProvider.methods({
   
   register() {
-    this.app.share(View.Patch, c => View.Patch.getDefault())
+    this.app.share(Patch, c => Patch.getDefault())
     this.app.share(MyApp)
   },
 
   boot(next) {
     const main = this.app.make(MyApp)
-    const root = View.Element('#root')
+    const root = Element('#root')
     main.mount(root)
     next()
   }
