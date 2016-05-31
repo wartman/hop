@@ -5,9 +5,6 @@ const assign = Object.assign
 
 /**
  * Fluent interface for creating stamps.
- *
- * This is the only place where we deviate a bit from stampit and use
- * method names I prefer.
  */
 const Stamp = Compose({
 

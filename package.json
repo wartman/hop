@@ -2,7 +2,8 @@
   "name": "@wartman/rabbit",
   "version": "0.0.1",
   "description": "Stamp-based reactive framework built on Snabbdom",
-  "main": "index.js",
+  "main": "index-compat.js",
+  "jsnext:main": "index.js",
   "directories": {
     "test": "test"
   },
@@ -14,7 +15,7 @@
   "repository": "https://wartman@bitbucket.org/wartman/rabbit.git",
   "devDependencies": {
     "ava": "^0.14.0",
-    "check-compose": "^1.1.3",
+    "check-compose": "^2.0.0",
     "rollup": "^0.25.8",
     "rollup-plugin-babel": "^2.4.0",
     "rollup-plugin-commonjs": "^2.2.1",

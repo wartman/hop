@@ -1,6 +1,13 @@
 import Container from './core/Container'
 import Config from './support/Config'
 
+/**
+ * The main entry point and service container for Rabbit.
+ *
+ * The Rabbit initializer should accept your configuration options, passed in
+ * as a plain JS object. You can access the configuration later using by
+ * resolving `Config` from the service container.
+ */
 const Rabbit = Container.init(function (options = {}) {
   this.instance(Container, this)
   this.instance(Rabbit, this)

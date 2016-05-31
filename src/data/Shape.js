@@ -174,4 +174,5 @@ export const BoolType = () => TypeChecker({expectedType: 'boolean'})
 export const NumberType = () => TypeChecker({expectedType: 'number'})
 
 export const ArrayOf = typeChecker => ArrayOfTypeChecker({typeChecker})
-export const ShapeOf = expectedShape => Shape({expectedShape}) 
+export const ShapeOf = expectedShape => Shape({expectedShape})
+export const ArrayOfShape = shape => ArrayOf(ShapeOf(shape))

@@ -81,8 +81,12 @@ function mergeComposable(dstDescriptor, srcComposable) {
   combineProperty('deepConfiguration', deepAssign)
 
   if (Array.isArray(srcDescriptor.initializers)) {
-    if (!Array.isArray(dstDescriptor.initializers)) dstDescriptor.initializers = []
-    dstDescriptor.initializers.push.apply(dstDescriptor.initializers, srcDescriptor.initializers.filter(isFunction))
+    dstDescriptor.initializers = srcDescriptor.initializers.reduce((result, init) => {
+      if (isFunction(init) && result.indexOf(init) < 0) { // ensure initializers are not repeated
+        result.push(init)
+      }
+      return result
+    }, Array.isArray(dstDescriptor.initializers) ? dstDescriptor.initializers : [])
   }
 
   return dstDescriptor
@@ -92,12 +96,13 @@ function mergeComposable(dstDescriptor, srcComposable) {
  * Compose two or more descriptors together.
  *
  * Adheres to https://github.com/stampit-org/stamp-specification
- * (and is based closely on the reference implementation)
+ * (and is based closely on the reference implementation found here:
+ * https://github.com/stampit-org/stamp-specification)
  *
  * @param {Composable} ...composables
  * @return {Stamp}
  */
-export default function compose(...composables) {
+export default function Compose(...composables) {
   const descriptor = [this].concat(composables).filter(isObject).reduce(mergeComposable, {});
-  return createStamp(descriptor, compose)
+  return createStamp(descriptor, Compose)
 }

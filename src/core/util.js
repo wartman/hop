@@ -20,16 +20,26 @@ export function isFunction(obj) {
   return tag === '[object Function]' || tag === '[object GeneratorFunction]'
 }
 
-export const uniqueId = (() => {
-  let _id = 0
-  return function uId(prefix='') {
-    _id++
-    if (prefix.length > 0) {
-      return `${prefix}_${_id}`
-    }
-    return _id
+/**
+ * Internal number for `uniqueId`. Simply increments.
+ *
+ * @var {Number}
+ */ 
+let UNIQUE_ID = 0
+
+/**
+ * Create a unique id.
+ *
+ * @param {String} prefix
+ * @return {String}
+ */
+export function uniqueId(prefix='') {
+  UNIQUE_ID++
+  if (prefix.length > 0) {
+    return `${prefix}_${UNIQUE_ID}`
   }
-})()
+  return UNIQUE_ID
+}
 
 /**
  * Internal function to recursively assign properties to an object.
@@ -80,14 +90,11 @@ const OBJECT_ID = Symbol('OBJECT_ID')
  * @param {Object} obj
  * @returns {Symbol}
  */
-export const ensureObjectId = (() => {
-  let currentId = 0
-  return obj => {
-    if (obj[OBJECT_ID] != null) return obj[OBJECT_ID]
-    obj[OBJECT_ID] = Symbol(currentId++)
-    return obj[OBJECT_ID]
-  }
-})()
+export function ensureObjectId(obj) {
+  if (obj[OBJECT_ID] != null) return obj[OBJECT_ID]
+  obj[OBJECT_ID] = Symbol(uniqueId('object_id'))
+  return obj[OBJECT_ID]
+}
 
 /**
  * Get an objects unique ID

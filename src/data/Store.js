@@ -37,7 +37,7 @@ const Store = Injectable.inject({
 }).methods({
 
   /**
-   * Connect reducers. Works the same as the static method.
+   * Connect reducers to a resource in the Store.
    *
    * @param {Object} reducers
    */
@@ -154,12 +154,10 @@ const Store = Injectable.inject({
 }).statics({
 
   /**
-   * Register a list of reducers the State should handle.
+   * Register a list of reducers the Store should handle. Each reducer will
+   * handle a signe resource on the store.
    *
-   * Reducers are NOT composed until the State is initialized, meaning you
-   * can add more reducers to the stamp.
-   *
-   * @param {Object} reducers - Functions or Reduceables
+   * @param {Object} reducers
    * @return {Stamp}
    */
   connect(reducers) {
@@ -171,6 +169,11 @@ const Store = Injectable.inject({
     })
   },
 
+  /**
+   * Attach Updates to the Store
+   *
+   * @param {Update} updates
+   * 
   updates(...updates) {
     const props = this.compose.properties
     return this.compose({
