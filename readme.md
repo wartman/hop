@@ -1,4 +1,4 @@
-# Rabbit
+# Hop
 
 A front-end framework built around [stamps](https://github.com/stampit-org/stamp-specification), with 
 views powered by [snabbdom](https://github.com/paldepind/snabbdom) and state provided by a store 
@@ -14,14 +14,14 @@ inspired by [redux](https://github.com/reactjs/redux).
 
 ## Introducton
 
-Rabbit is an (almost) complete framework for client-side apps. The best way to figure out how it
+Hop is an (almost) complete framework for client-side apps. The best way to figure out how it
 all works is probably to read through the source and to check out the `todo` example in the
 [example folder](example/todo).
 
 Before continuing, you should familiarize yourself with [stamps](https://github.com/stampit-org/stamp-specification),
-as they're used extensively in Rabbit. Rabbit has its own implementation, but it's based closely on 
+as they're used extensively in Hop. Hop has its own implementation, but it's based closely on 
 the reference implementation and designed to comply with the stamp-specification (running `npm test` 
-will test Rabbit's `Compose` function against the [test-suite](https://github.com/stampit-org/check-compose) 
+will test Hop's `Compose` function against the [test-suite](https://github.com/stampit-org/check-compose) 
 provided by stampit-org).
 
 You should also read through [snabbdom's](https://github.com/paldepind/snabbdom) code and get familiar with it.
@@ -30,7 +30,7 @@ You should also read through [snabbdom's](https://github.com/paldepind/snabbdom)
 
 ## Features
 
-Rabbit consists of three core components:
+Hop consists of three core components:
 
 * The service container and dependency injection framework
 * A predictable state container (or "store") and a framework to update it
@@ -42,7 +42,7 @@ Dependency injection is pretty simple:
 
 ```js
 
-import { Injectable, Container } from 'wartman/rabbit/core'
+import { Injectable, Container } from '@wartman/hop'
 import MyDep from './MyDep'
 
 const Foo = Injectable.inject({
@@ -68,8 +68,7 @@ In your app, you should use `ServiceProviders` to provide everything. Here's wha
 
 ```js
 
-import { ServiceProvider } from 'wartman/rabbit/core'
-import { Element, Patch } from 'wartman/rabbit/view'
+import { ServiceProvider, Element, Patch } from '@wartman/hop'
 import MyApp from '../components/MyApp'
 
 const ViewServiceProvider = ServiceProvider.methods({
@@ -96,10 +95,10 @@ You'd then run your app something like this:
 
 ```js
 
-import Rabbit from 'wartman/rabbit'
+import Hop from '@wartman/hop'
 import ViewServiceProvider from './providers/ViewServiceProvider'
 
-Rabbit.Application({
+Hop({
   // config here
 }).services(
   ViewServiceProvider
@@ -111,15 +110,15 @@ See the [todo](example/todo) example for a more detailed look at this.
 
 ## Store
 
-Rabbit uses a predictable state container called `Store` based heavily on [Redux](https://github.com/reactjs/redux).
-Reading up on it will give you a good understanding of Rabbit's `Store` too.
+Hop uses a predictable state container called `Store` based heavily on [Redux](https://github.com/reactjs/redux).
+Reading up on it will give you a good understanding of Hop's `Store` too.
 
 The store relies on **reducers** to modify the state, which are just functions with the signature `(state, action)`. 
 The simplest way to use them is via the `connect` method on `Store`, which creates a new Stamp.
 
 ```js
 
-import { Store } from 'wartman/rabbit/data'
+import { Store } from '@wartman/hop/data'
 
 const MyStore = Store.connect({
   foo(state, action) {
@@ -147,13 +146,13 @@ console.log(store.getState().foo) // => 'bar'
 
 ```
 
-You COULD just create simple reducers like this for everything in your store, but Rabbit provides
+You COULD just create simple reducers like this for everything in your store, but Hop provides
 a cleaner framework for this with its `Update` Stamp. Because the expected shape of the resource
-is so important, Rabbit Updates can validate that for you too.
+is so important, Hop Updates can validate that for you too.
 
 ```js
 
-import { Update, Shapes, Action } from 'wartman/rabbit/data'
+import { Update, Shapes, Action } from '@wartman/hop/data'
 
 const Foo = Update.type('foo').shape({
   value: Shapes.StringType().require()
@@ -173,7 +172,7 @@ We can add Updates to our Store with the `updates` method -- AND we'll get some 
 
 ```js
 
-import { Store } from 'wartman/rabbit/data'
+import { Store } from '@wartman/hop'
 import Foo from '../updates/Foo'
 
 const MyStore = Store.updates(Foo)
@@ -199,9 +198,7 @@ This section is still very much in progress, but here's an example:
 
 ```js
 
-import { Config } from 'wartman/rabbit/core'
-import { Store } from 'wartman/rabbit/data'
-import { Component, h1, button, header } from 'wartman/rabbit/view'
+import { Config, Store, Component, h1, button, header } from '@wartman/hop'
 import TodoTextInput from './TodoTextInput'
 
 const Header = Component.inject({

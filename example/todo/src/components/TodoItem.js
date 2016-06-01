@@ -1,5 +1,4 @@
-import { Store } from '../../../../data'
-import { Component, li, div, input, label, button } from '../../../../view'
+import { Store, Component, li, div, input, label, button } from '@wartman/hop'
 import TodoTextInput from './TodoTextInput'
 import { COMPLETED } from '../updates/Filter'
 

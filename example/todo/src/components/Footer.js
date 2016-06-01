@@ -1,5 +1,4 @@
-import { Store } from '../../../../data'
-import { Component, ul, li, a, span, strong, button } from '../../../../view'
+import { Store, Component, ul, li, a, span, strong, button } from '@wartman/hop'
 import { ALL, ACTIVE, COMPLETED } from '../updates/Filter'
 
 const Footer = Component.inject({

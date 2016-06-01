@@ -1,4 +1,4 @@
-import { Component, span, input, button } from '../../../../view'
+import { Component, span, input, button } from '@wartman/hop'
 
 const TodoTextInput = Component.init(function ({
   newTodo,

@@ -1,4 +1,4 @@
-import { Update, Action, Shapes } from '../../../../data'
+import { Update, Action, Shapes } from '@wartman/hop'
 import { ACTIVE, COMPLETED } from './Filter'
 
 const Todos = Update.type('todos').shape(

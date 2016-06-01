@@ -1,6 +1,4 @@
-import { Config } from '../../../../core'
-import { Store } from '../../../../data'
-import { Component, header, h1, button } from '../../../../view'
+import { Config, Store, Component, header, h1, button } from '@wartman/hop'
 import TodoTextInput from './TodoTextInput'
 
 const Header = Component.inject({
@@ -16,11 +14,6 @@ const Header = Component.inject({
     return [
       h1('todos'),
 
-      button({
-        class: { 'sync-button': true },
-        on: {click: this.getFromServer.bind(this)}
-      }, 'Sync'),
-
       TodoTextInput({
         onSave: this.handleSave.bind(this),
         newTodo: true,
@@ -34,12 +27,7 @@ const Header = Component.inject({
     if (text.length) {
       this.store.todos.add({text})
     }
-  },
-
-  getFromServer(e) {
-    e.preventDefault()
-    this.store.request.fetchAll()
-  },
+  }
 
 })
 

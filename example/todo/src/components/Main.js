@@ -1,5 +1,4 @@
-import { Store } from '../../../../data'
-import { Component, section, ul } from '../../../../view'
+import { Store, Component, section, ul } from '@wartman/hop'
 import TodoItem from './TodoItem'
 import Footer from './Footer'
 import { ALL, ACTIVE, COMPLETED } from '../updates/Filter'

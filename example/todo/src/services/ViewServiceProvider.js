@@ -1,5 +1,4 @@
-import { ServiceProvider } from '../../../../core'
-import { Patch, Element } from '../../../../view'
+import { ServiceProvider, Patch, Element } from '@wartman/hop'
 import Main from '../components/Main'
 import App from '../components/App'
 

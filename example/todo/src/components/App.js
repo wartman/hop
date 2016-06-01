@@ -1,8 +1,6 @@
-import { Application } from '../../../../core'
-import { Component, section, footer, p, a } from '../../../../view'
+import { Application, Component, section, footer, p, a } from '@wartman/hop'
 import Header from './Header'
 import Main from './Main'
-import Spinner from './Spinner'
 
 const App = Component.inject({
   app: Application
@@ -15,8 +13,7 @@ const App = Component.inject({
     return [
       section('.todoapp', [
         this.app.make(Header),
-        this.app.make(Main),
-        this.app.make(Spinner)
+        this.app.make(Main)
       ]),
       footer('.info', [
         p('Double-click to edit a todo'),

@@ -8,6 +8,14 @@ const cjs = require('rollup-plugin-commonjs')
 const path = require('path')
 const fs = require('fs')
 
+const mockHopId = () => ({
+  resolveId(file, origin) {
+    if (file == '@wartman/hop') {
+      return path.resolve(__dirname, '../../index.js')
+    }
+  }
+})
+
 /**
  * Run rollup and bundle the todo app.
  *
@@ -28,12 +36,13 @@ const bundle = function (options) {
       }),
       cjs(),
       builtins(),
+      mockHopId(),
       node()
     ]
   }).then(function (bundle) {
     return bundle.generate({
       format: 'iife',
-      moduleName: 'panels'
+      moduleName: 'rabbit'
     })
   }).catch(function (err) {
     console.error(err.message, err.pos, err.loc, err.codeFrame)

@@ -1,4 +1,4 @@
-import { Update, Action, Shapes } from '../../../../data'
+import { Update, Action, Shapes } from '@wartman/hop'
 
 const ALL = 0
 const ACTIVE = 1

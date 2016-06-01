@@ -1,5 +1,5 @@
 {
-  "name": "@wartman/rabbit",
+  "name": "@wartman/hop",
   "version": "0.0.1",
   "description": "Stamp-based reactive framework built on Snabbdom",
   "main": "index-compat.js",
