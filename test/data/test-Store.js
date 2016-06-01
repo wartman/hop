@@ -57,7 +57,7 @@ test('reducers can be extended', t => {
   t.deepEqual({foo: 'changed', bar: 'changed', bif: 'changed'}, store.getState())
 })
 
-test('uses reduceables', t => {
+test('uses Updates', t => {
   const store = StoreStub.updates(Bif).new({app, initialState: {foo: 'bar', bar: 'bar', bif: 'bif'}})
 
   t.deepEqual({foo: 'bar', bar: 'bar', bif: 'bif'}, store.getState())

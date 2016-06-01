@@ -17,9 +17,9 @@ const Container = Stamp.init(function () {
   /**
    * Bind an abstract to a concrete resolver.
    *
-   * @param {string|object} abstract
-   * @param {object|function|null} concrete
-   * @param {boolean} shared
+   * @param {String | Object} abstract
+   * @param {Object | Function | null} concrete
+   * @param {Boolean} shared
    * @return {this}
    */
   bind(abstract, concrete, shared = false) {
@@ -45,7 +45,7 @@ const Container = Stamp.init(function () {
   /**
    * Bind an instance to the abstract.
    *
-   * @param {string|object} abstract
+   * @param {string | object} abstract
    * @param {object} instance
    * @retrun {this}
    */
@@ -58,8 +58,8 @@ const Container = Stamp.init(function () {
   /**
    * Share an item (ensuring it is only resolved once)
    *
-   * @param {string|object} abstract
-   * @param {object|function|null} concrete
+   * @param {string | object} abstract
+   * @param {object | function | null} concrete
    * @retrun {this}
    */
   share(abstract, concrete = null) {
@@ -70,7 +70,7 @@ const Container = Stamp.init(function () {
   /**
    * Add an alias for an abstract
    *
-   * @param {object|string} abstract
+   * @param {object | string} abstract
    * @param {string} alias
    * @return {this}
    */
@@ -86,10 +86,10 @@ const Container = Stamp.init(function () {
   /**
    * Return an id for the given obj.
    *
-   * @param {object|string} obj - If a string, this method will check aliases
+   * @param {object | string} obj - If a string, this method will check aliases
    *                              for a match first. If an object, an Object ID
    *                              will be returned.
-   * @return {string|Symbol}
+   * @return {string | Symbol}
    */
   getName(obj) {
     obj = typeof obj === 'string' ? obj : ensureObjectId(obj)
@@ -99,7 +99,7 @@ const Container = Stamp.init(function () {
   /**
    * Get the concrete representation of the abstract
    *
-   * @param {string|object} abstract
+   * @param {string | object} abstract
    * @return {mixed}
    */
   getConcrete(abstract) {
@@ -111,7 +111,7 @@ const Container = Stamp.init(function () {
   /**
    * Check if the binding is shared
    *
-   * @param {object|string} abstract
+   * @param {object | string} abstract
    * @return {boolean}
    */
   isShared(abstract) {
@@ -123,7 +123,7 @@ const Container = Stamp.init(function () {
   /**
    * Resolve a binding.
    *
-   * @param {object|string} abstract
+   * @param {object | string} abstract
    * @param {object} params
    * @return {object}
    */
@@ -145,8 +145,8 @@ const Container = Stamp.init(function () {
   /**
    * Resolve dependencies for an object.
    *
-   * @throws {Error} If a stamp or function is not passed to `concrete`
-   * @param {Stamp|function} concrete
+   * @throws {Error} - If a stamp or function is not passed to `concrete`
+   * @param {Stamp | Function} concrete
    * @param {object} params
    * @return {object}
    */

@@ -1,12 +1,29 @@
 import { ServiceProvider, Store } from '@wartman/hop'
 import Todos from '../updates/Todos'
 import Filter from '../updates/Filter'
-import { ALL } from '../updates/Filter'
+import { ALL, COMPLETED, ACTIVE } from '../updates/Filter'
 import LocalStorage from '../data/LocalStorage'
 
 const StoreServiceProvider = ServiceProvider.methods({
 
   register() {
+
+    // Very dumb routing:
+    const hash = window.location.hash
+    const filter = hash === '#completed' 
+      ? {
+        label: 'Completed',
+        value: COMPLETED
+      } 
+      : hash === '#active' 
+        ? {
+          label: 'Active',
+          value: ACTIVE 
+        } : {
+          label: 'All',
+          value: ALL
+        }
+
     this.app.share(LocalStorage)
     this.app.share(Store, c => Store.updates(
       Todos,
@@ -15,10 +32,7 @@ const StoreServiceProvider = ServiceProvider.methods({
       app: c,
       initialState: {
         todos: [],
-        filter: {
-          label: 'All',
-          value: ALL
-        }
+        filter
       }
     }))
   },

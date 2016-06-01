@@ -8,7 +8,7 @@ function getValue(value, context, def = null ) {
 }
 
 /**
- * Components are the basic building blocks of Rabbit views.
+ * Components are the basic building blocks of Hop views.
  */
 const Component = Injectable.init(function ({patch, state} = {}) {
   if (patch) { 

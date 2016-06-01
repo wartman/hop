@@ -118,7 +118,7 @@ The simplest way to use them is via the `connect` method on `Store`, which creat
 
 ```js
 
-import { Store } from '@wartman/hop/data'
+import { Store } from '@wartman/hop'
 
 const MyStore = Store.connect({
   foo(state, action) {
@@ -134,7 +134,7 @@ export default MyStore
 
 ```
 
-We can now modify the `foo` property in our Store's state by dispatching an action:
+We can now modify the `foo` property (which we call a 'resource') in our Store's state by dispatching an action:
 
 ```js
 
@@ -147,12 +147,12 @@ console.log(store.getState().foo) // => 'bar'
 ```
 
 You COULD just create simple reducers like this for everything in your store, but Hop provides
-a cleaner framework for this with its `Update` Stamp. Because the expected shape of the resource
-is so important, Hop Updates can validate that for you too.
+a cleaner framework for this with its `Update` Stamp (which can be thought of as the `Model` part
+of Hop). Because the expected shape of the resource is so important, Hop Updates can define that too.
 
 ```js
 
-import { Update, Shapes, Action } from '@wartman/hop/data'
+import { Update, Shapes, Action } from '@wartman/hop'
 
 const Foo = Update.type('foo').shape({
   value: Shapes.StringType().require()

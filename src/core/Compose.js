@@ -9,8 +9,8 @@ const isDescriptor = (obj) => isObject(obj)
 /**
  * Creates new factory instance.
  *
- * @param {object} descriptor The information about the object the factory will be creating.
- * @returns {Function} The new factory function.
+ * @param {Object} descriptor - The information about the object the factory will be creating.
+ * @returns {Function} - The new factory function.
  */
 function createFactory(descriptor) {
   return function Stamp(options, ...args) {
@@ -33,8 +33,8 @@ function createFactory(descriptor) {
 /**
  * Returns a new stamp given a descriptor and a compose function implementation.
  *
- * @param {object} [descriptor={}] The information about the object the stamp will be creating.
- * @param {Function} composeFunction The "compose" function implementation.
+ * @param {Object} descriptor - The information about the object the stamp will be creating.
+ * @param {Function} composeFunction - The "compose" function implementation.
  * @returns {Function}
  */
 function createStamp(descriptor, composeFunction) {
@@ -56,9 +56,9 @@ function createStamp(descriptor, composeFunction) {
 /**
  * Mutates the dstDescriptor by merging the srcComposable data into it.
  *
- * @param {object} dstDescriptor The descriptor object to deepAssign into.
- * @param {object} [srcComposable] The composable (either descriptor or stamp) to deepAssign data form.
- * @returns {object} Returns the dstDescriptor argument.
+ * @param {Object} dstDescriptor - The descriptor object to deepAssign into.
+ * @param {Object} srcComposable - The composable (either descriptor or stamp) to deepAssign data form.
+ * @returns {Object} Returns the dstDescriptor argument.
  */
 function mergeComposable(dstDescriptor, srcComposable) {
   const srcDescriptor = (srcComposable && srcComposable.compose) || srcComposable

@@ -2,7 +2,7 @@ import Container from './Container'
 import Config from './Config'
 
 /**
- * The main entry point and service container for Rabbit.
+ * The main entry point and service container for Hop.
  *
  * The Application initializer should accept your configuration options, passed in
  * as a plain JS object. You can access the configuration later using by

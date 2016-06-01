@@ -33,7 +33,7 @@ let PATCH_INSTANCE
  * exist, it'll be created here.
  *
  * While we typically want to avoid singletons in favor of dependency
- * injection in Rabbit, in this case it makes far more sense to share 
+ * injection in Hop, in this case it makes far more sense to share 
  * `Patch` with all `Components`. 99.99% of the time you won't need to 
  * use anything but the defaults.
  *

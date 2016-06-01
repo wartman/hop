@@ -17,7 +17,7 @@ const App = Component.inject({
       ]),
       footer('.info', [
         p('Double-click to edit a todo'),
-        p(['Written by ',  a({attrs: {href: 'http://shipwreckplanet.com'}}, 'wartman')]),
+        p(['Written by ',  a({attrs: {href: 'https://github.com/wartman'}}, 'wartman')]),
         p(['Part of ', a({attrs: {href: 'http://todomvc.com'}}, 'TodoMVC')])
       ])
     ]

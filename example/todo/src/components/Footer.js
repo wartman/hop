@@ -30,21 +30,21 @@ const Footer = Component.inject({
         li([
           a({
             attrs: {href: "#all"},
-            class: {selected: filter.label === 'All'},
+            class: {selected: filter.value === ALL},
             on: {click: this.showAll.bind(this)}
           }, 'All')
         ]),
         li([
           a({
             attrs: {href: "#active"},
-            class: {selected: filter.label === 'Active'},
+            class: {selected: filter.value === ACTIVE},
             on: {click: this.showActive.bind(this)}
           }, 'Active')
         ]),
         li([
           a({
             attrs: {href: "#completed"},
-            class: {selected: filter.label === 'Completed'},
+            class: {selected: filter.value === COMPLETED},
             on: {click: this.showCompleted.bind(this)}
           }, 'Completed')
         ])

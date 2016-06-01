@@ -42,7 +42,7 @@ const bundle = function (options) {
   }).then(function (bundle) {
     return bundle.generate({
       format: 'iife',
-      moduleName: 'rabbit'
+      moduleName: 'hop'
     })
   }).catch(function (err) {
     console.error(err.message, err.pos, err.loc, err.codeFrame)
