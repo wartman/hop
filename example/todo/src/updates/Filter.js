@@ -1,12 +1,12 @@
-import { Update, Action, Shapes } from '@wartman/hop'
+import { Update, Action, Shape } from '@wartman/hop'
 
 const ALL = 0
 const ACTIVE = 1
 const COMPLETED = 2
 
 const Filter = Update.type('filter').shape({
-  label: Shapes.StringType().require(),
-  value: Shapes.NumberType().require()
+  label: Shape.string.isRequired,
+  value: Shape.number.isRequired
 }).actions({
 
   active: Action((state) => {

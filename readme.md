@@ -152,10 +152,10 @@ of Hop). Because the expected shape of the resource is so important, Hop Updates
 
 ```js
 
-import { Update, Shapes, Action } from '@wartman/hop'
+import { Update, Shape, Action } from '@wartman/hop'
 
 const Foo = Update.type('foo').shape({
-  value: Shapes.StringType().require()
+  value: Shape.string.isRequired
 }).actions({
     
   set: Action('value', (store, value) => {

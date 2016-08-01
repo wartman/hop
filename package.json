@@ -15,6 +15,7 @@
   "repository": "https://wartman@bitbucket.org/wartman/rabbit.git",
   "devDependencies": {
     "ava": "^0.14.0",
+    "babel-preset-es2015-rollup": "^1.1.1",
     "check-compose": "^2.0.0",
     "rollup": "^0.25.8",
     "rollup-plugin-babel": "^2.4.0",

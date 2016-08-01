@@ -1,6 +1,6 @@
 import test from 'ava'
 import Update, { Action } from '../../src/data/Update'
-import Shape, { StringType, ShapeOf } from '../../src/data/Shape'
+import Shape from '../../src/data/Shape'
 import Store from '../../src/data/Store'
 
 const store = Store.connect({foo: (state) => state}).new({app: {}})
@@ -65,8 +65,8 @@ test('dispatches attached store via shortcut', t => {
 
 test('Can check shape if provided', t => {
   const action = UpdateStub.shape({
-    name: StringType().require(),
-    title: StringType()
+    name: Shape.string.isRequired,
+    title: Shape.string
   }).new()
   action.attachTo(store)
   action.renameWithTitle('bar', 'mr')

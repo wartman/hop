@@ -21,10 +21,9 @@ export { default as Stamp } from './src/core/Stamp'
 export { default as ServiceProvider } from './src/core/ServiceProvider'
 export { default as Config } from './src/core/Config'
 
-import * as Shapes from './src/data/Shape'
+export { default as Shape } from './src/data/Shape'
 export { default as Store } from './src/data/Store'
 export { default as Update, Action } from './src/data/Update'
-export { Shapes }
 
 export { default as Component } from './src/view/Component'
 export { default as Patch } from './src/view/Patch'

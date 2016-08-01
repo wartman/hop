@@ -1,13 +1,11 @@
-import { Update, Action, Shapes } from '@wartman/hop'
+import { Update, Action, Shape } from '@wartman/hop'
 import { ACTIVE, COMPLETED } from './Filter'
 
-const Todos = Update.type('todos').shape(
-  Shapes.ArrayOfShape({
-    id: Shapes.NumberType().require(),
-    text: Shapes.StringType().require(),
-    completed: Shapes.NumberType().require()
-  })
-).init(function () {
+const Todos = Update.type('todos').shape(Shape.array.of({
+  id: Shape.number.isRequired,
+  text: Shape.string.isRequired,
+  completed: Shape.number.isRequired
+})).init(function () {
   this._id = 0
 }).actions({
 

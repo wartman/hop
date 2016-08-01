@@ -1,23 +1,13 @@
 import test from 'ava'
-import Shape, { 
-  ArrayType,
-  StringType,
-  ObjectType,
-  FuncType,
-  BoolType,
-  NumberType,
-  ArrayOf,
-  ShapeOf,
-  ArrayOfShape
-} from '../../src/data/Shape'
+import Shape from '../../src/data/Shape'
 
 // These tests are just a start: need something a lot more robust.
 
 test('Checks types', t => {
-  const shape = Shape.describe({
-    foo: StringType().require(),
-    bar: ArrayOf(StringType())
-  }).new({})
+  const shape = Shape.object.of({
+    foo: Shape.string.isRequired,
+    bar: Shape.array.of(Shape.string)
+  })
   t.is("Error", shape.check({}).name)
   t.is(null, shape.check({
     foo: 'foo',
@@ -36,23 +26,23 @@ function testTypeChecker(checker, passing, failing) {
   })
 }
 
-testTypeChecker(ArrayType(), ['foo'], 'foo')
-testTypeChecker(StringType(), 'foo', 1)
-testTypeChecker(ObjectType(), {foo: 'foo'}, [])
-testTypeChecker(FuncType(), function test() {}, 'foo')
-testTypeChecker(FuncType(), () => {}, 'foo')
-testTypeChecker(BoolType(), true, 'foo')
-testTypeChecker(BoolType(), false, 'foo')
-testTypeChecker(NumberType(), 900, 'foo')
-testTypeChecker(ShapeOf({
-  foo: StringType(),
-  bar: ArrayOf(NumberType())
+testTypeChecker(Shape.array, ['foo'], 'foo')
+testTypeChecker(Shape.string, 'foo', 1)
+testTypeChecker(Shape.object, {foo: 'foo'}, [])
+testTypeChecker(Shape.func, function test() {}, 'foo')
+testTypeChecker(Shape.func, () => {}, 'foo')
+testTypeChecker(Shape.bool, true, 'foo')
+testTypeChecker(Shape.bool, false, 'foo')
+testTypeChecker(Shape.number, 900, 'foo')
+testTypeChecker(Shape.object.of({
+  foo: Shape.string,
+  bar: Shape.array.of(Shape.number)
 }), {foo: 'foo', bar: [1, 2]}, {foo: 'bar', bar: ['foo', 'bar', 1]})
-testTypeChecker(ArrayOf(StringType()), ['foo', 'bar'], ['foo', 1])
-testTypeChecker(ArrayOfShape({
-  foo: StringType(),
-  bar: ArrayOf(NumberType())
-}), [
+testTypeChecker(Shape.array.of(Shape.string), ['foo', 'bar'], ['foo', 1])
+testTypeChecker(Shape.array.of(Shape.object.of({
+  foo: Shape.string,
+  bar: Shape.array.of(Shape.number)
+})), [
   {foo: 'foo', bar: [1, 2]}, 
   {foo: 'thing', bar: [1, 2]}
 ], [
